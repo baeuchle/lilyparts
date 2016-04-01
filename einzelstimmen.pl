@@ -5,7 +5,6 @@ my @dateien = ();
 my @stimmen = ();
 my $partitur = '';
 our %stimmeda = ();
-my $midi = '';
 my @markerlist;
 my $namesuffix = '';
 
@@ -18,7 +17,6 @@ GetOptions ( 'help|h|?' => \&help
            , 'datei=s@' => \@dateien
            , 'stimme=s@' => \@stimmen
            , 'partitur!' => \$partitur
-           , 'midi!' => \$midi
            , 'markers=s@' => \@markerlist
            , 'namesuffix=s' => \$namesuffix
            );
@@ -84,12 +82,6 @@ for my $dateiname (@dateien) {
     elsif (s/^\s*\%EINZEL//) {
       next if $partitur;
     }
-    # Special-Casing für %MIDI: Zeile wird nur geschrieben, wenn MIDI
-    # gegeben ist. Könnte auch --marker MIDI sein, bräuchte dann aber
-    # %%MIDI statt %MIDI.
-    elsif (s/^\s*\%MIDI\b//) {
-      next unless $midi;
-    }
     # %%MARKER wird nur geschrieben, wenn --marker MARKER gegeben wurde.
     # Das ist case-insensitive.
     elsif (s/^\s*\%\%(\S+)//) {
@@ -140,8 +132,6 @@ OPTIONEN:
 --marker #: Definiert Kommentar-Marker, deren Zeilen überall auftauchen.
             Beispiel: --marker ASDF wird Zeilen, die mit %%ASDF
             anfangen, einbeziehen.
---midi:     Wie --marker MIDI, nur, dass es mit einem "%" zufrieden ist
-            (%MIDI statt %%MIDI).
 --namesuffix #:
             Name-Anhängsel, um diesen Auszug zu bezeichnen. Mit
             --namesuffix asdf wird aus Datei test.ly der Auszug
