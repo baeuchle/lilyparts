@@ -2,15 +2,20 @@
 
 for D in $*; do
     d=${D/.ly/}
-    for s in 1 2 3 4; do
-        einzelstimmen.pl --stimme $s --datei $d.ly;
-        lilypond $d$s.ly;
-        rm $d$s.ly $d$s.midi;
-    done;
-    einzelstimmen.pl --midi --datei $d.ly;
+    # Normale Version:
     lilypond $d.ly;
     rm $d.midi;
-    lilypond $d.midi.ly;
-    mv $d.midi.midi $d.midi;
-    rm $d.midi.ly $d.midi.pdf;
+    # Stimmen:
+    for s in 1 2 3 4 5 6 7 8 9 0; do
+        if [ "$(grep -q "GIT $s" $d.ly; echo $?)" == "0" ]; then
+            einzelstimmen.pl --stimme $s --datei $d.ly;
+            lilypond $d$s.ly;
+            rm $d$s.ly $d$s.midi;
+        fi;
+    done;
+    # MIDI-Version:
+    einzelstimmen.pl --marker MIDI --datei $d.ly --namesuffix .midiversion;
+    lilypond $d.midiversion.ly;
+    mv $d.midiversion.midi $d.midi;
+    rm *midiversion*;
 done
