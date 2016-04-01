@@ -1,0 +1,16 @@
+#!/bin/bash
+
+for D in $*; do
+    d=${D/.ly/}
+    for s in 1 2 3 4; do
+        einzelstimmen.pl --stimme $s --datei $d.ly;
+        lilypond $d$s.ly;
+        rm $d$s.ly $d$s.midi;
+    done;
+    einzelstimmen.pl --midi --datei $d.ly;
+    lilypond $d.ly;
+    rm $d.midi;
+    lilypond $d.midi.ly;
+    mv $d.midi.midi $d.midi;
+    rm $d.midi.ly $d.midi.pdf;
+done
