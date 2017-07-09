@@ -5,6 +5,11 @@ for D in $*; do
     # Normale Version:
     lilypond $d.ly;
     rm $d.midi;
+    # MIDI-Version:
+    einzelstimmen.pl --marker MIDI --datei $d.ly --namesuffix .midiversion;
+    lilypond $d.midiversion.ly;
+    mv $d.midiversion.midi $d.midi;
+    rm *midiversion*;
     # Stimmen:
     for s in 1 2 3 4 5 6 7 8 9 0; do
         if [ "$(grep -q "GIT $s" $d.ly; echo $?)" == "0" ]; then
@@ -13,9 +18,4 @@ for D in $*; do
             rm $d$s.ly $d$s.midi;
         fi;
     done;
-    # MIDI-Version:
-    einzelstimmen.pl --marker MIDI --datei $d.ly --namesuffix .midiversion;
-    lilypond $d.midiversion.ly;
-    mv $d.midiversion.midi $d.midi;
-    rm *midiversion*;
 done
