@@ -49,3 +49,6 @@ gitDreiS = {}
 gitVierS = {}
 gitBassS = {}
 saxAltAS = {}
+gitElecS = {}
+querFltS = {}
+gitOktaS = {}

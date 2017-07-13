@@ -69,3 +69,36 @@ saxAltAM = \new Staff <<
     \saxAltAS
   }
 >>
+
+gitElecM = \new Staff <<
+  \new Voice {
+    \set Staff.instrumentName = "E-Gitarre"
+    \set Staff.shortInstrumentName = "(E)"
+    \clef "G_8"
+    \set Staff.midiInstrument = #"overdriven guitar"
+    \global
+    \gitElecS
+  }
+>>
+
+querFltM = \new Staff <<
+  \new Voice {
+    \set Staff.instrumentName = "Querflöte"
+    \set Staff.shortInstrumentName = "(Q)"
+    \clef "G"
+    \set Staff.midiInstrument = #"flute"
+    \global
+    \querFltS
+  }
+>>
+
+gitOktaM = \new Staff <<
+  \new Voice {
+    \set Staff.instrumentName = "Oktavgitarre"
+    \set Staff.shortInstrumentName = "(O)"
+    \clef "G"
+    \set Staff.midiInstrument = #"acoustic guitar (nylon)"
+    \global
+    \gitOktaS
+  }
+>>
