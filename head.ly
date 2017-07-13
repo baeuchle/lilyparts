@@ -29,6 +29,11 @@ saxb = 0 % Bass voice sax
 quer = 0 % Flute
 % Perkussion
 perc = 0
+% oktavgitarre
+okta = 0
+% E-Gitarre
+eGit = 0
+
 % Midi soll geschrieben werden
 midiOn = 0
 
