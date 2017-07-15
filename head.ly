@@ -45,3 +45,8 @@ gitElecS = {}
 querFltS = {}
 saxAltAS = {}
 saxAltBS = {}
+percussS = {}
+
+percLines = #2
+#(define percTable '(
+                   ))

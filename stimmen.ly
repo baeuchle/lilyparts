@@ -70,6 +70,18 @@ saxAltAM = \new Staff <<
   }
 >>
 
+saxAltBM = \new Staff <<
+  \new Voice {
+    \set Staff.instrumentName = "Saxophon Ⅱ"
+    \set Staff.shortInstrumentName = "(SⅡ)"
+    \clef "G"
+    \set Staff.midiInstrument = #"alto sax"
+    \transposition es
+    \transpose es c { \global }
+    \saxAltBS
+  }
+>>
+
 gitElecM = \new Staff <<
   \new Voice {
     \set Staff.instrumentName = "E-Gitarre"
@@ -102,3 +114,17 @@ gitOktaM = \new Staff <<
     \gitOktaS
   }
 >>
+
+percussM = {
+  \new DrumStaff \with {
+    \override StaffSymbol.line-count = \percLines
+    countPercentRepeats = ##t
+    drumStyleTable = #(alist->hash-table percTable)
+  }
+  <<
+    \global
+    \set DrumStaff.instrumentName = "Drums"
+    \set DrumStaff.shortInstrumentName = "(D)"
+    \new DrumVoice \percussS
+  >>
+}
