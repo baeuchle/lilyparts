@@ -128,3 +128,21 @@ percussM = {
     \new DrumVoice \percussS
   >>
 }
+
+#(begin
+    (display "Instrumente: ")
+    (display instruments)
+    (newline)
+
+    (display "Auszug: ")
+    (display auszug)
+    (newline)
+
+    (display "Suffix: ")
+    (display suffix)
+    (newline)
+
+    (display "MIDI: ")
+    (if makeMidi (display "ja") (display "nein"))
+    (newline)
+)

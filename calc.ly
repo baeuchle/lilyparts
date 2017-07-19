@@ -65,25 +65,7 @@
         (if showElec (define suffix (string-append suffix "_e")))
         (if showQuer (define suffix (string-append suffix "_q")))
         (if showSaxo (define suffix (string-append suffix "_s")))
-        (if showSaxb (define suffix (string-append suffix "_b")))
+        (if showSaxb (define suffix (string-append suffix "_sb")))
     ))
     (if (> (string-length suffix) 0) (define suffix (substring suffix 1)))
-)
-
-#(begin
-    (display "Instrumente: ")
-    (display instruments)
-    (newline)
-
-    (display "Auszug: ")
-    (display auszug)
-    (newline)
-
-    (display "Suffix: ")
-    (display suffix)
-    (newline)
-
-    (display "MIDI: ")
-    (if makeMidi (display "ja") (display "nein"))
-    (newline)
 )
