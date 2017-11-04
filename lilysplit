@@ -16,7 +16,7 @@ for D in $*; do
     for s in $(seq 1 $(((${#namen[@]}-1)))); do
         has="has${namen[$s]}";
         show="show${namen[$s]}";
-        echo "Stimme s ${namen[$s]}";
+        echo "Stimme $s ${namen[$s]}";
         if [ "$(grep -q $has $d.ly; echo $?)" == "0" ]; then
             lilypond -dmidi-extension=midirm -e "(begin (define showAlle #f) (define $show #t))" "$d.ly";
         fi;
