@@ -6,7 +6,6 @@
 %}
 
 % Noten:
-\bookOutputSuffix \suffix
 \score {
   % Bei MIDI ist immer jeder Output aktiviert.
   %{
