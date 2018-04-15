@@ -31,12 +31,6 @@
 )
 
 #(begin
-    (display "Version: ")
-    (display version)
-    (newline)
-)
-
-#(begin
     set-default-paper-size "a4"
     ly:set-option 'point-and-click #f
 )

@@ -130,6 +130,11 @@ percussM = {
 }
 
 #(begin
+
+    (display "Version: ")
+    (display gitver)
+    (newline)
+
     (display "Instrumente: ")
     (display instruments)
     (newline)
