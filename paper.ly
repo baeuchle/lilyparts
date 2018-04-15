@@ -40,7 +40,7 @@
   }
   oddFooterMarkup = \markup {
     \fill-line {
-      \line {}
+      \on-the-fly #first-page \gitver
       \fromproperty #'header:copyright
       \fromproperty #'page:page-number-string
     }

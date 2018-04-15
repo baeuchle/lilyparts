@@ -13,6 +13,7 @@
 % setzt dann showPart, showEins etc auf diesen Wert, außer wenn auf cmdline anders definiert.
 % setzt auch hasEins, hasZwei etc auf false.
 #(begin
+    (if (not (and #t (defined? 'gitver))) (define gitver ""))
     (if (not (and #t (defined? 'makeMidi))) (define makeMidi #f))
     (if (not (and #t (defined? 'showAlle))) (define showAlle #t))
     (if (not (and #t (defined? 'showPart))) (define showPart showAlle))
@@ -27,6 +28,12 @@
     (if (not (and #t (defined? 'showQuer))) (define showQuer showAlle)) (define hasQuer #f)
     (if (not (and #t (defined? 'showSaxo))) (define showSaxo showAlle)) (define hasSaxo #f)
     (if (not (and #t (defined? 'showSaxb))) (define showSaxb showAlle)) (define hasSaxb #f)
+)
+
+#(begin
+    (display "Version: ")
+    (display version)
+    (newline)
 )
 
 #(begin
