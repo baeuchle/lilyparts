@@ -14,6 +14,7 @@ path_candidates=($HOME/.bin $HOME/bin /usr/bin /usr/local/bin)
 for dir in $path_candidates; do
     if [[ $PATH == *":$dir:"* ]] && [ -w "$dir" ]; then
         path=$dir
+        break
     fi
 done
 
@@ -27,3 +28,5 @@ echo "Copying $file to $dir/$file";
 
 perl -pe 's{^\s*includedir=.*$}{includedir='$(dirname $(readlink -f $0))'}' $file > $dir/$file
 chmod +x $dir/$file
+# store file name for uninstall
+echo "$dir/$file" >> .install_destination
