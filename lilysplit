@@ -1,24 +1,46 @@
 #!/bin/bash
 
+if [ -x "$(which git)" ]; then
+    version="Ver $(git describe --tags --dirty --always)"
+else
+    version=""
+fi
+
+includedir="$(dirname $0)"
+include="--include $includedir"
+
+nomidi="-dmidi-extension=midirm"
+echo "Kompiliere $version"
+echo "Inkludiere $include"
+
 for D in $*; do
     d=${D/.ly/}
     d=$(echo $d | sed 's/\/$//')
     b=$(basename $d)
+    # look for version information for each lilypond file separately:
+    olddir=$PWD
+    cd $(dirname $d)
+    if [ -x "$(which git)" ]; then
+        version="Ver $(git describe --tags --dirty --always)"
+    else
+        version=""
+    fi
+    cd $olddir
     # Normale Version:
     # (wir löschen später alles, was mit midirm aufhört)
-    lilypond -dmidi-extension=midirm $d.ly;
+    lilypond $include $nomidi -e "(define gitver \"$version\")" $d.ly;
     mv $b-.pdf $b.pdf
     # MIDI-Version (wir löschen nachher auch das ps)
-    lilypond --ps -dmidi-extension=midi -e '(define makeMidi #t)' $d.ly;
+    lilypond $include --ps -dmidi-extension=midi -e "(begin (define gitver \"$version\") (define makeMidi #t))" $d.ly;
     mv $b-midi.midi $b.midi
     # Stimmen:
-    namen=(a Eins Zwei Drei Vier Bass Drum Okta Elec Quer Saxo Saxb)
+    namen=(unused Eins Zwei Drei Vier Bass Drum Okta Elec Quer Saxo Saxb)
     for s in $(seq 1 $(((${#namen[@]}-1)))); do
         has="has${namen[$s]}";
         show="show${namen[$s]}";
         echo "Stimme $s ${namen[$s]}";
         if [ "$(grep -q $has $d.ly; echo $?)" == "0" ]; then
-            lilypond -dmidi-extension=midirm -e "(begin (define showAlle #f) (define $show #t))" "$d.ly";
+            lilypond $include $nomidi -e "(begin (define gitver \"$version\") (define showAlle #f) (define $show #t))" "$d.ly";
         fi;
     done;
     rm $b*midirm;
