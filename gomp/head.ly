@@ -52,3 +52,37 @@ percussS = {}
 percLines = #2
 #(define percTable '(
                    ))
+
+namedSpan = #(define-music-function
+  (parser location name musix)
+  (string? ly:music?)
+  #{
+    \ottava #0
+    \set Staff.ottavation = #name
+    #musix
+    \ottava #0
+  #}
+) 
+
+
+divisi = #(define-music-function
+  (parser location musix)
+  (ly:music?)
+  #{
+    \ottava #0
+    \set Staff.ottavation = #"divisi"
+    #musix
+    \ottava #0
+  #}
+) 
+
+solo = #(define-music-function
+  (parser location musix)
+  (ly:music?)
+  #{
+    \ottava #0
+    \set Staff.ottavation = #"Solo"
+    #musix
+    \ottava #0
+  #}
+)
