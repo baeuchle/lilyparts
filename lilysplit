@@ -1,46 +1,56 @@
 #!/bin/bash
 
-if [ -x "$(which git)" ]; then
-    version="Ver $(git describe --tags --dirty --always)"
+includedir="$(dirname $0)"
+if [ -x "$(which lilypond)" ]; then
+    echo ""
 else
-    version=""
+    echo "Lilypond not found, please install" >&2
+    exit 1;
 fi
 
-includedir="$(dirname $0)"
-include="--include $includedir"
+lilyver=""
+if [ -x "$(which git)" ]; then
+    cd $includedir;
+    lilyver="lilyparts $(git describe --tags --dirty --always)"
+    cd - >/dev/null
+fi
 
+LILYOPTS=" --include $includedir --loglevel=BASIC "
 nomidi="-dmidi-extension=midirm"
-echo "Kompiliere $version"
-echo "Inkludiere $include"
+echo -e "Starting \033[1mlilysplit\033[0m using \033[1;32m$lilyver\033[0m"
 
 for D in $*; do
     d=${D/.ly/}
     d=$(echo $d | sed 's/\/$//')
     b=$(basename $d)
     # look for version information for each lilypond file separately:
-    olddir=$PWD
-    cd $(dirname $d)
     if [ -x "$(which git)" ]; then
-        version="Ver $(git describe --tags --dirty --always)"
+        cd $(dirname $d)
+        version="$(git describe --tags --dirty --always)"
+        cd - > /dev/null
     else
         version=""
     fi
-    cd $olddir
+    echo -e "Compiling \033[1m$d\033[0m, Version \033[1;34m$version\033[0m"
     # Normale Version:
     # (wir löschen später alles, was mit midirm aufhört)
-    lilypond $include $nomidi -e "(define gitver \"$version\")" $d.ly;
+    echo -e "\033[1;34mComplete Score\033[0m"
+    lilypond $LILYOPTS $nomidi -e "(define gitver \"$version\")" $d.ly;
     mv $b-.pdf $b.pdf
     # MIDI-Version (wir löschen nachher auch das ps)
-    lilypond $include --ps -dmidi-extension=midi -e "(begin (define gitver \"$version\") (define makeMidi #t))" $d.ly;
+    echo -e "\033[1;34mMidi Version\033[0m"
+    lilypond $LILYOPTS --ps -dmidi-extension=midi -e "(begin (define lilyver \"$lilyver\") (define gitver \"$version\") (define makeMidi #t))" $d.ly;
     mv $b-midi.midi $b.midi
     # Stimmen:
     namen=(unused Eins Zwei Drei Vier Bass Drum Okta Elec Quer Saxo Saxb)
     for s in $(seq 1 $(((${#namen[@]}-1)))); do
         has="has${namen[$s]}";
         show="show${namen[$s]}";
-        echo "Stimme $s ${namen[$s]}";
         if [ "$(grep -q $has $d.ly; echo $?)" == "0" ]; then
-            lilypond $include $nomidi -e "(begin (define gitver \"$version\") (define showAlle #f) (define $show #t))" "$d.ly";
+            echo -e "\033[1;34mExcerpt $s\033[0m: \033[0;32m${namen[$s]}\033[0m"
+            lilypond $LILYOPTS $nomidi -e "(begin (define lilyver \"$lilyver\") (define gitver \"$version\") (define showAlle #f) (define $show #t))" "$d.ly";
+        else
+            echo -e "\033[31mNo excerpt $s\033[0m: \033[0;35m${namen[$s]}\033[0m"
         fi;
     done;
     rm $b*midirm;
