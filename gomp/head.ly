@@ -32,8 +32,8 @@
 )
 
 #(begin
-    set-default-paper-size "a4"
-    ly:set-option 'point-and-click #f
+    (set-default-paper-size "a4")
+    (ly:set-option 'point-and-click #f)
 )
 
 % Wir definieren für alle Instrumente eine *S*timme. Diese Variablen werden in stimmen.ly in Scores gepackt.
