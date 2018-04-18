@@ -35,7 +35,7 @@ for D in $*; do
     # Normale Version:
     # (wir löschen später alles, was mit midirm aufhört)
     echo -e "\033[1;34mComplete Score\033[0m"
-    lilypond $LILYOPTS $nomidi -e "(define gitver \"$version\")" $d.ly;
+    lilypond $LILYOPTS $nomidi -e "(begin (define lilyver \"$lilyver\") (define gitver \"$version\"))" $d.ly;
     mv $b-.pdf $b.pdf
     # MIDI-Version (wir löschen nachher auch das ps)
     echo -e "\033[1;34mMidi Version\033[0m"

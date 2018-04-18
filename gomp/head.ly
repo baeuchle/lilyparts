@@ -14,6 +14,7 @@
 % setzt auch hasEins, hasZwei etc auf false.
 #(begin
     (if (not (and #t (defined? 'gitver))) (define gitver ""))
+    (if (not (and #t (defined? 'lilyver))) (define lilyver ""))
     (if (not (and #t (defined? 'makeMidi))) (define makeMidi #f))
     (if (not (and #t (defined? 'showAlle))) (define showAlle #t))
     (if (not (and #t (defined? 'showPart))) (define showPart showAlle))
