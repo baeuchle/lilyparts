@@ -106,3 +106,9 @@ bassTacet = #(define-music-function
   (ly:music?)
   #{ \namedSpan "Bass tacet" #musix #}
 )
+
+straight = #(define-music-function
+  (parser location musix)
+  (ly:music?)
+  #{ \namedSpan "Straight" #musix #}
+)
