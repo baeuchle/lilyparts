@@ -70,10 +70,7 @@ divisi = #(define-music-function
   (boolean? ly:music? ly:music?)
   (if yield
   #{
-    \ottava #0
-    \set Staff.ottavation = #"divisi"
-    << #additional \\ #normal >>
-    \ottava #0
+    \namedSpan "divisi" << #additional \\ #normal >>
   #}
   #{
     <<
@@ -89,10 +86,23 @@ divisi = #(define-music-function
 solo = #(define-music-function
   (parser location musix)
   (ly:music?)
-  #{
-    \ottava #0
-    \set Staff.ottavation = #"Solo"
-    #musix
-    \ottava #0
-  #}
+  #{ \namedSpan "Solo" #musix #}
+)
+
+bassAchtva = \markup { \musicglyph #"pedal.*" }
+#(define-markup-command
+  (bassAchtvaExplain layout props maybe)
+  (boolean?)
+  (if maybe
+  (interpret-markup layout props #{
+    \markup { \musicglyph #"pedal.*": Bassgitarre 1 Oktave höher }
+  #})
+  (interpret-markup layout props #{ "" #})
+  )
+)
+
+bassTacet = #(define-music-function
+  (parser location musix)
+  (ly:music?)
+  #{ \namedSpan "Bass tacet" #musix #}
 )
