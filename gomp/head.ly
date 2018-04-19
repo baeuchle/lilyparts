@@ -37,6 +37,7 @@
 )
 
 % Wir definieren für alle Instrumente eine *S*timme. Diese Variablen werden in stimmen.ly in Scores gepackt.
+gitDiviS = {}
 gitEinsS = {}
 gitZweiS = {}
 gitDreiS = {}
@@ -64,16 +65,25 @@ namedSpan = #(define-music-function
   #}
 ) 
 
-
 divisi = #(define-music-function
-  (parser location musix)
-  (ly:music?)
+  (parser location yield normal additional)
+  (boolean? ly:music? ly:music?)
+  (if yield
   #{
     \ottava #0
     \set Staff.ottavation = #"divisi"
-    #musix
+    << #additional \\ #normal >>
     \ottava #0
   #}
+  #{
+    <<
+      #normal
+      \context Staff = "diviGit" {
+        \startStaff #additional \stopStaff
+      }
+    >>
+  #}
+  )
 ) 
 
 solo = #(define-music-function

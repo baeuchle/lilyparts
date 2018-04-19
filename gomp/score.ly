@@ -21,6 +21,7 @@
       \gitZweiM
       \gitDreiM
       \gitVierM
+      \gitDiviM
       \gitBassM
       \percussM
       \querFltM
@@ -47,6 +48,7 @@
       #(if showZwei gitZweiM)
       #(if showDrei gitDreiM)
       #(if showVier gitVierM)
+      \gitDiviM
       #(if showBass gitBassM)
     >>
     \new StaffGroup <<

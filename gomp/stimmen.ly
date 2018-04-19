@@ -3,6 +3,20 @@
    Musiksystem-Variablen (...M)
 %}
 
+gitDiviM = { \new Staff = "diviGit" \with {
+     \remove "Time_signature_engraver"
+     \RemoveEmptyStaves
+     \override VerticalAxisGroup.remove-first = ##t
+     \hide Clef
+     \clef "G_8"
+     fontSize = #-4
+     midiInstrument = #"acoustic guitar (nylon)"
+     \override StaffSymbol.staff-space = #(magstep -4)
+     \override StaffSymbol.thickness = #(magstep -4)
+     \global
+  } { \stopStaff \gitDiviS }
+}
+
 gitEinsM = \new Staff <<
   \new Voice {
     \set Staff.instrumentName = "Gitarre 1"
