@@ -16,6 +16,7 @@
 
 \paper {
   evenHeaderMarkup = \markup {
+    \abs-fontsize #8
     \fill-line {
       \auszug
       \fromproperty #'header:title
@@ -23,6 +24,7 @@
     }
   }
   oddHeaderMarkup = \markup {
+    \abs-fontsize #8
     \fill-line {
       \line {}
       \on-the-fly #not-first-page
@@ -32,6 +34,7 @@
     }
   }
   evenFooterMarkup = \markup {
+    \abs-fontsize #8
     \fill-line {
       \fromproperty #'page:page-number-string
       \fromproperty #'header:copyright
@@ -39,6 +42,7 @@
     }
   }
   oddFooterMarkup = \markup {
+    \abs-fontsize #8
     \fill-line {
       \on-the-fly #first-page \line { \gitver \lilyver }
       \fromproperty #'header:copyright
