@@ -17,13 +17,15 @@ gitEinsS = \relative c {
   \break
   c8
   \diviMark #0 c8
-  \diviMark #1 <c e>4
-  \diviMark #2 { c }
-  \diviMark #3 { <c e> }
+  \diviMark #1 <c e>8
+  \diviMark #2 { c8 }
+  \diviMark #3 { <c e>4 }
   \diviMark #4 \relative c c
   \diviMark #5 \relative c, <c' e>
   \diviMark #6 \relative c' { c, }
   \diviMark #7 \relative c'' { <c,, e> }
+  \diviMark #8 r4
+  \diviMark #9 R1
   \diviMark #1 \variable % make sure \variable is not changed:
   \diviMark #2 \variable
   \variable
@@ -32,13 +34,15 @@ gitEinsS = \relative c {
   \break
   c8->
   \diviMark #0 c8->
-  \diviMark #1 <c e>4->
-  \diviMark #2 { c-> }
-  \diviMark #3 { <c e>-> }
+  \diviMark #1 <c e>8->
+  \diviMark #2 { c8-> }
+  \diviMark #3 { <c e>4-> }
   \diviMark #4 \relative c c->
   \diviMark #5 \relative c, <c' e>->
   \diviMark #6 \relative c' { c,-> }
   \diviMark #7 \relative c'' { <c,, e>-> }
+  \diviMark #8 r4->
+  \diviMark #9 R1\fermataMarkup
   \diviMark #1 \variableAcc % make sure \variableAcc is not changed:
   \diviMark #2 \variableAcc
   \variableAcc

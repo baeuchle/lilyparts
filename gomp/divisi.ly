@@ -71,7 +71,11 @@ unMarkedDivisi = #(define-music-function
   (let ((musicType (ly:music-property note 'name)))
     ; the given music object is a NoteEvent? That's easy, simply add the
     ; markup to its articulations.
-    (if (eq? musicType 'NoteEvent)
+    ; Same procedure for MultiMeasureRestMusic
+    (if (or (eq? musicType 'NoteEvent)
+            (eq? musicType 'MultiMeasureRestMusic)
+            (eq? musicType 'RestEvent)
+        )
       (begin
         (set!
           (ly:music-property note 'articulations)
@@ -125,7 +129,13 @@ unMarkedDivisi = #(define-music-function
       (display "Unknown Type in firstMark: ")
       (display musicType)
       (newline)
-      (display "Only know how to handle NoteEvent, EventChord, RelativeOctaveMusic and SequentialMusic.")
+      (display "Only know how to handle:\n")
+      (display " NoteEvent,\n")
+      (display " EventChord,\n")
+      (display " MultiMeasureRestMusic,\n")
+      (display " RelativeOctaveMusic,\n")
+      (display " RestEvent,\n")
+      (display " SequentialMusic.")
       (newline)
       (display-scheme-music note)
       (newline)
