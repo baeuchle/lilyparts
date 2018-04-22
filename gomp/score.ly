@@ -24,6 +24,7 @@
       \gitDiviM
       \gitBassM
       \percussM
+      \gitPercM
       \querFltM
       \saxAltAM
       \saxAltBM
