@@ -17,6 +17,16 @@ gitDiviM = { \new Staff = "diviGit" \with {
   } { \stopStaff \gitDiviS }
 }
 
+gitPercM = {
+  \new DrumStaff = "percGit"  <<
+    \global
+    \new DrumVoice { 
+      \stopStaff
+      \gitDiviS
+    }
+  >>
+}
+
 gitEinsM = \new Staff <<
   \new Voice {
     \set Staff.instrumentName = "Gitarre 1"
