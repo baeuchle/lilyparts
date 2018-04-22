@@ -36,10 +36,18 @@ for D in $*; do
     # (wir löschen später alles, was mit midirm aufhört)
     echo -e "\033[1;34mComplete Score\033[0m"
     lilypond $LILYOPTS $nomidi -e "(begin (define lilyver \"$lilyver\") (define gitver \"$version\"))" $d.ly;
+    if [ $? -eq 1 ]; then
+      echo -e "\033[1;31mCompilation failed!\033[0m"
+      continue;
+    fi
     mv $b-.pdf $b.pdf
     # MIDI-Version (wir löschen nachher auch das ps)
     echo -e "\033[1;34mMidi Version\033[0m"
     lilypond $LILYOPTS --ps -dmidi-extension=midi -e "(begin (define lilyver \"$lilyver\") (define gitver \"$version\") (define makeMidi #t))" $d.ly;
+    if [ $? -eq 1 ]; then
+      echo -e "\033[1;31mCompilation failed!\033[0m"
+      continue;
+    fi
     mv $b-midi.midi $b.midi
     # Stimmen:
     namen=(unused Eins Zwei Drei Vier Bass Drum Okta Elec Quer Saxo Saxb)
@@ -49,6 +57,10 @@ for D in $*; do
         if [ "$(grep -q $has $d.ly; echo $?)" == "0" ]; then
             echo -e "\033[1;34mExcerpt $s\033[0m: \033[0;32m${namen[$s]}\033[0m"
             lilypond $LILYOPTS $nomidi -e "(begin (define lilyver \"$lilyver\") (define gitver \"$version\") (define showAlle #f) (define $show #t))" "$d.ly";
+            if [ $? -eq 1 ]; then
+              echo -e "\033[1;31mCompilation failed!\033[0m"
+              break;
+            fi
         else
             echo -e "\033[31mNo excerpt $s\033[0m: \033[0;35m${namen[$s]}\033[0m"
         fi;
