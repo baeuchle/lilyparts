@@ -94,16 +94,17 @@ percLines = #2
                 (setNoteHead (list-ref (hashq-ref percHash (ly:music-property drums 'drum-type)) 0))
               )
               (begin
-                (display "WARNING: No predefined NoteHead found for ")
-                (display (ly:music-property drums 'drum-type 'unspecified-drum-type))
-                (newline)
-                (ly:music-set-property! drums 'add-info "This drum-type does NOT have a defined NoteHead")
                 (if (eq? (ly:music-property drums 'drum-type 'invalid) 'invalid)
                   (begin
-                    (ly:music-set-property! drums 'add-info "No DRUM!")
+                    (display "WARNING: This is not a drum! MIDI output unspecified\n")
                     (setNoteHead 'default)
                   )
-                  (setNoteHead 'slash)
+                  (begin
+                    (display "WARNING: No predefined NoteHead found for ")
+                    (display (ly:music-property drums 'drum-type 'unspecified-drum-type))
+                    (newline)
+                    (setNoteHead 'slash)
+                  )
                 )
               )
             )
