@@ -126,7 +126,7 @@ unMarkedDivisi = #(define-music-function
         note
       )
     (begin
-      (display "Unknown Type in firstMark: ")
+      (display "WARNING: Unknown Type in firstMark: ")
       (display musicType)
       (newline)
       (display "Only know how to handle:\n")
