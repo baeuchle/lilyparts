@@ -10,14 +10,12 @@
 )
 #(define PERCUSSION_HELPERS_LY_ALREADY_INCLUDED #t)
 
+% number of lines in drum system:
 percLines = #2
-#(define percTable '(
-                   (hihat   cross    #t 3)
-                   (snare   diamond    "open" 1)
-                   (lowtom  xcircle  #t 0)
-                   (hightom triangle  "halfopen" -1)
-                   ))
-    #(define percHaSh (alist->hash-table percTable))
+% drum types. By default, this is empty; overwrite it with
+% #(define percTable '( (drumname notehead accent position) .. ))
+% close to your drum definition.
+#(define percTable '())
 
 #(define (unsetMiddleC) (begin
   ;;(display "unsetMiddleC[]\n")
@@ -80,6 +78,11 @@ percLines = #2
         'elements (map (lambda (x) (transformDrumNotes x percHash)) (ly:music-property drums 'elements))
         'add-info "inserted by transformDrumNotes with SequentialMusic"
       )
+    (if (eq? musicType 'UnfoldedRepeatedMusic)
+      (begin
+        (ly:music-set-property! drums 'element (transformDrumNotes (ly:music-property drums 'element) percHash))
+        drums
+      )
     (if (eq? musicType 'NoteEvent)
       (begin
         (make-music 'SequentialMusic
@@ -117,6 +120,9 @@ percLines = #2
           )
         )
       )
+    (if (eq? musicType 'RestEvent)
+      ;; Don't change rests.
+      drums
     (if (eq? musicType 'EventChord)
       ;; The problem with EventChord is that I would have to set and reset
       ;; middleCPosition twice inside one chord. Simply recursing like in
@@ -137,14 +143,14 @@ percLines = #2
       (display " NoteEvent,\n")
       ;;(display " MultiMeasureRestMusic,\n")
       ;;(display " RelativeOctaveMusic,\n")
-      ;;(display " RestEvent,\n")
-      (display " SequentialMusic.")
-      (newline)
+      (display " RestEvent,\n")
+      (display " SequentialMusic,\n")
+      (display " UnfoldedRepeatedMusic.\n")
       (display-scheme-music drums)
       (newline)
       ;;TODO: Optionally color the notes
       (make-music 'SequentialMusic 'elements (list drums))
-    ))))
+    ))))))
   )
 )
 
