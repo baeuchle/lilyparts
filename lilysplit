@@ -11,7 +11,8 @@ fi
 lilyver=""
 if [ -x "$(which git)" ]; then
     cd $includedir;
-    lilyver="lilyparts $(git describe --tags --dirty --always)"
+    lilyver="$(git describe --tags --dirty --always)"
+    lilyver="${lilyver/v/l}"
     cd - >/dev/null
 fi
 
