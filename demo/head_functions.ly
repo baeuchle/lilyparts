@@ -3,6 +3,8 @@ hasEins = ##t
 \include "gomp/calc.ly"
 #(set-global-staff-size 32)
 
+#(define percTable '((hihat cross #f 3)))
+
 global = {}
 variable = { c4 }
 variableAcc = { c4-> }
@@ -12,7 +14,7 @@ gitEinsS = \relative c {
   \bassTacet { c c c c }
   \break
   \straight { c c c c }
-  \perc { c^\markup "(Perc)" c c c }
+  \perc { c^\markup "(Perc)" \drummode { sn2 hh4 } }
   { c^\bassAchtva c^\bassAchtva c^\bassAchtva c^\bassAchtva }
   \break
   c8
