@@ -1,6 +1,6 @@
 #!/bin/bash
 
-test -t 2; makeColoredOutput=$?;
+[[ -t 1 ]] && makeColoredOutput=0 || makeColoredOutput=1;
 loglevel="BASIC"
 includedir="$(dirname $0)"
 LILYOPTS="--include $includedir"
@@ -19,7 +19,7 @@ while [[ $# -gt 0 ]]; do
       makeColoredOutput=1;
       shift;;
     --loglevel)
-      loglevel=$2A
+      loglevel=$2;
       LILYOPTS="$LILYOPTS --loglevel=$2";
       shift; shift;;
     --lilyoptions)
@@ -46,33 +46,35 @@ while [[ $# -gt 0 ]]; do
     --)
       shift;
       break;;
+    *)
+      shift;;
   esac
 done
 
 ####COLORIZE OUTPUT####
-if [[ "$makeColoredOutput" -eq 0 ]]; then # TODO: or --color but not --no-color
+if [[ "$makeColoredOutput" -eq 0 ]]; then
   noColor="\e[0m"
-  headlineColor="\e[1m"
-  versionColor="\e[1;32m"
-  slimVersionColor="\e[4;32m"
-  fileColor="\e[4m"
-  errorColor="\e[1;31m"
-  warningColor="\e[0;31m"
-  progressColor="\e[1;34m"
-  excerptColor="\e[35m"
+  headlineColor="\e[0m\e[1m"
+  versionColor="\e[0m\e[1;32m"
+  slimVersionColor="\e[0m\e[4;32m"
+  fileColor="\e[0m\e[4;30m"
+  errorColor="\e[0m\e[1;31m"
+  warningColor="\e[0m\e[0;31m"
+  progressColor="\e[0m\e[1;34m"
+  excerptColor="\e[0m\e[35m"
 fi
 
 if [ -x "$LILYEXE" ]; then
   true
 else
-  echo "${headlineColor}lilypond${errorColor} not found, please use $filecolor--lilyexe /path/to/lilypond$noColor" >&2
+  echo -e "${headlineColor}lilypond${errorColor} not found, please use $fileColor--lilyexe /path/to/lilypond$noColor" >&2
   exit 1;
 fi
 if [ $usegit -eq 0 ]; then
   if [ -x "$GITEXE" ]; then
     true
   else
-    echo "${headlineColor}git${warnColor} not found, please use $fileColor--gitexe /path/to/git$warncolor or $fileColor--nogit$noColor" >&2
+    echo -e "${headlineColor}git${warningColor} not found, please use $fileColor--gitexe /path/to/git$warningColor or $fileColor--nogit$noColor" >&2
     usegit=1
   fi
 fi
