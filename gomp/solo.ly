@@ -4,7 +4,7 @@
 %}
 
 #(if (defined? 'SOLO_LY_ALREADY_INCLUDED)
- (display "solo.ly has already been included, crossing fingers!")
+ (ly:warning "solo.ly has already been included, crossing fingers!")
 )
 #(define SOLO_LY_ALREADY_INCLUDED #t)
 

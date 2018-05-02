@@ -6,7 +6,7 @@
 %}
 
 #(if (defined? 'BASS_IN_GUITAR_LY_ALREADY_INCLUDED)
- (display "bass_in_guitar.ly has already been included, crossing fingers!")
+ (ly:warning "bass_in_guitar.ly has already been included, crossing fingers!")
 )
 #(define BASS_IN_GUITAR_LY_ALREADY_INCLUDED #t)
 

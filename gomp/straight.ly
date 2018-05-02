@@ -4,7 +4,7 @@
 %}
 
 #(if (defined? 'STRAIGHT_LY_ALREADY_INCLUDED)
- (display "straight.ly has already been included, crossing fingers!")
+ (ly:warning "straight.ly has already been included, crossing fingers!")
 )
 #(define STRAIGHT_LY_ALREADY_INCLUDED #t)
 

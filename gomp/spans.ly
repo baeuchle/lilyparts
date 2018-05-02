@@ -7,7 +7,7 @@
 %}
 
 #(if (defined? 'SPANS_LY_ALREADY_INCLUDED)
- (display "spans.ly has already been included, crossing fingers!")
+ (ly:warning "spans.ly has already been included, crossing fingers!")
 )
 #(define SPANS_LY_ALREADY_INCLUDED #t)
 

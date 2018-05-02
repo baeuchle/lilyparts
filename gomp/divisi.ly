@@ -6,7 +6,7 @@
 %}
 
 #(if (defined? 'DIVISI_LY_ALREADY_INCLUDED)
- (display "divisi.ly has already been included, crossing fingers!")
+ (ly:warning "divisi.ly has already been included, crossing fingers!")
 )
 #(define DIVISI_LY_ALREADY_INCLUDED #t)
 
@@ -126,17 +126,14 @@ unMarkedDivisi = #(define-music-function
         note
       )
     (begin
-      (display "WARNING: Unknown Type in firstMark: ")
-      (display musicType)
-      (newline)
-      (display "Only know how to handle:\n")
-      (display " NoteEvent,\n")
-      (display " EventChord,\n")
-      (display " MultiMeasureRestMusic,\n")
-      (display " RelativeOctaveMusic,\n")
-      (display " RestEvent,\n")
-      (display " SequentialMusic.")
-      (newline)
+      (ly:warning "Unknown Type in firstMark: ~a" musicType)
+      (ly:warning "Only know how to handle:")
+      (ly:warning " NoteEvent,")
+      (ly:warning " EventChord,")
+      (ly:warning " MultiMeasureRestMusic,")
+      (ly:warning " RelativeOctaveMusic,")
+      (ly:warning " RestEvent,")
+      (ly:warning " SequentialMusic.")
       (display-scheme-music note)
       (newline)
       (make-music 'SequentialMusic 'elements (list note))

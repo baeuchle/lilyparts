@@ -5,8 +5,10 @@
     \perc drums
 %}
 
+\version "2.18.2"
+
 #(if (defined? 'PERCUSSION_HELPERS_LY_ALREADY_INCLUDED)
- (display "percussion_helpers.ly has already been included, crossing fingers!")
+ (ly:warning "percussion_helpers.ly has already been included, crossing fingers!" "")
 )
 #(define PERCUSSION_HELPERS_LY_ALREADY_INCLUDED #t)
 
@@ -18,7 +20,7 @@ percLines = #2
 #(define percTable '())
 
 #(define (unsetMiddleC) (begin
-  ;;(display "unsetMiddleC[]\n")
+  (ly:debug "unsetMiddleC[]")
   (make-music
     'ContextSpeccedMusic
     'context-type 'Voice
@@ -30,9 +32,7 @@ percLines = #2
   )
 ))
 #(define (setMiddleC notePosition) (begin
-  ;;(display "setMiddleC[")
-  ;;(display notePosition)
-  ;;(display "]\n")
+  (ly:debug "setMiddleC[~a]" notePosition)
   (make-music
     'ContextSpeccedMusic
     'context-type 'Voice
@@ -46,9 +46,7 @@ percLines = #2
 ))
 
 #(define (setNoteHead value) (begin
-  ;;(display "setNoteHead[")
-  ;;(display value)
-  ;;(display "]\n")
+  (ly:debug "setNoteHead[~a]" value)
   (make-music
     'ContextSpeccedMusic
     'context-type 'Bottom
@@ -64,11 +62,7 @@ percLines = #2
 ))
 
 #(define (inspect key value) (begin
-   (display "Key: ")
-   (display key)
-   (display "; Value: ")
-   (display value)
-   (newline)
+   (ly:debug "Key: ~a; Value: ~a" key value)
 ))
 
 #(define (transformDrumNotes drums percHash)
@@ -96,13 +90,11 @@ percLines = #2
               (begin
                 (if (eq? (ly:music-property drums 'drum-type 'invalid) 'invalid)
                   (begin
-                    (display "WARNING: This is not a drum! MIDI output unspecified\n")
+                    (ly:warning "This is not a drum! MIDI output unspecified")
                     (setNoteHead 'default)
                   )
                   (begin
-                    (display "WARNING: No predefined NoteHead found for ")
-                    (display (ly:music-property drums 'drum-type 'unspecified-drum-type))
-                    (newline)
+                    (ly:warning "No predefined NoteHead found for ~a" (ly:music-property drums 'drum-type 'unspecified-drum-type))
                     (setNoteHead 'slash)
                   )
                 )
@@ -130,25 +122,20 @@ percLines = #2
       ;; SequentialMusic yields a missing note, which isn't what we want
       ;; either. Therefore, for the time being, EventChords are forbidden.
       (begin
-        (display "ERROR: Invalid Type in transformDrumNotes: ")
-        (display musicType)
-        (display " is not supported\n")
+        (ly:error "ERROR: Invalid Type in transformDrumNotes: ~a is not supported" musicType)
         ;;TODO: Optionally color the notes
         (make-music 'SequentialMusic 'elements (list drums))
       )
     (begin
-      (display "WARNING: Unknown Type in transformDrumNotes: ")
-      (display musicType)
-      (newline)
-      (display "Only know how to handle:\n")
-      (display " NoteEvent,\n")
-      ;;(display " MultiMeasureRestMusic,\n")
-      ;;(display " RelativeOctaveMusic,\n")
-      (display " RestEvent,\n")
-      (display " SequentialMusic,\n")
-      (display " UnfoldedRepeatedMusic.\n")
+      (ly:warning "WARNING: Unknown Type in transformDrumNotes: ~a" musicType)
+      (ly:warning "Only know how to handle:")
+      (ly:warning " NoteEvent,")
+      ;;(ly:warning " MultiMeasureRestMusic,")
+      ;;(ly:warning " RelativeOctaveMusic,")
+      (ly:warning " RestEvent,")
+      (ly:warning " SequentialMusic,")
+      (ly:warning " UnfoldedRepeatedMusic.")
       (display-scheme-music drums)
-      (newline)
       ;;TODO: Optionally color the notes
       (make-music 'SequentialMusic 'elements (list drums))
     ))))))

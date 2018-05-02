@@ -18,7 +18,7 @@ gitEinsS = \relative c {
   \namedSpan "unfolded and unknown" \perc \drummode { \repeat unfold 6 hh8 cymr4 }
   \bar "|."
 }
-gitDiviS = { s1*3 }
+gitDiviS = { s1*4 }
 \include "gomp/stimmen.ly"
 
 \book {

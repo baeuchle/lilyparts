@@ -2,13 +2,18 @@
   Head definitions for GOMP lilypond files.
 %}
 
+\version "2.18.2"
+
+#(if (defined? 'HEAD_LY_ALREADY_INCLUDED)
+  (ly:warning "head.ly has already been included, crossing fingers!")
+)
+#(define HEAD_LY_ALREADY_INCLUDED #t)
+
 % make includes relative for this file (and set it to default at the end):
 #(begin
   (define includes_are_relative (ly:get-option 'relative-includes))
   (ly:set-option 'relative-includes #t)
 )
-
-\version "2.18.2"
 
 #(use-modules (guile-user))
 % sets showAlle to true, except when disabled on command line.
@@ -54,10 +59,10 @@ saxAltBS = {}
 percussS = {}
 
 \include "spans.ly"
-\include "divisi.ly"
-\include "solo.ly"
-\include "bass_in_guitar.ly"
+% \include "divisi.ly"
+% \include "solo.ly"
+% \include "bass_in_guitar.ly"
 \include "percussion_helpers.ly"
-\include "straight.ly"
+% \include "straight.ly"
 
 #(ly:set-option 'relative-includes includes_are_relative)
