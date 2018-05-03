@@ -49,8 +49,7 @@ while [[ $# -gt 0 ]]; do
       shift;
       break;;
     *)
-      echo "Adding $1"
-      files+=($1);
+      files+=($key);
       shift;;
   esac
 done
