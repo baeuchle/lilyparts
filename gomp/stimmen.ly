@@ -154,9 +154,9 @@ percussM = {
 }
 
 #(begin
-  (ly:progress "Version: ~a ~a" gitver lilyver)
-  (ly:progress "Instruments: ~a" instruments)
-  (ly:progress "Excerpt: ~a" auszug)
-  (ly:progress "Suffix: ~a" suffix)
-  (ly:progress "MIDI: ~a" (if makeMidi "ja" "nein"))
+  (ly:progress "\nVersion: ~a ~a\n" gitver lilyver)
+  (ly:progress "Instruments: ~a\n" instruments)
+  (ly:progress "Excerpt: ~a\n" auszug)
+  (ly:progress "Suffix: ~a\n" suffix)
+  (ly:progress "MIDI: ~a\n" (if makeMidi "ja" "nein"))
 )

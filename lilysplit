@@ -9,6 +9,8 @@ GITEXE="$(which git)"
 GITOPT="describe --tags --dirty --always"
 usegit=0 # 0: true, 1: false
 
+files=()
+
 while [[ $# -gt 0 ]]; do
   key="$1"
   case $key in
@@ -47,9 +49,13 @@ while [[ $# -gt 0 ]]; do
       shift;
       break;;
     *)
+      echo "Adding $1"
+      files+=($1);
       shift;;
   esac
 done
+
+files+=($*)
 
 ####COLORIZE OUTPUT####
 if [[ "$makeColoredOutput" -eq 0 ]]; then
@@ -90,7 +96,7 @@ fi
 nomidi="-dmidi-extension=midirm"
 echo -e "Starting ${headlineColor}lilysplit$noColor using $versionColor$lilyver$noColor"
 
-for D in $*; do
+for D in "${files[@]}"; do
     d=${D/.ly/}
     d=$(echo $d | sed 's/\/$//')
     b=$(basename $d)

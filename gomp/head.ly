@@ -59,10 +59,10 @@ saxAltBS = {}
 percussS = {}
 
 \include "spans.ly"
-% \include "divisi.ly"
-% \include "solo.ly"
-% \include "bass_in_guitar.ly"
+\include "divisi.ly"
+\include "solo.ly"
+\include "bass_in_guitar.ly"
 \include "percussion_helpers.ly"
-% \include "straight.ly"
+\include "straight.ly"
 
 #(ly:set-option 'relative-includes includes_are_relative)

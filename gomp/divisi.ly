@@ -10,8 +10,8 @@
 )
 #(define DIVISI_LY_ALREADY_INCLUDED #t)
 
-#(if (not (defined? 'SPANS_LY_ALREADY_INCLUDED))
-  #{ \include "spans.ly" #}
+$(if (not (defined? 'SPANS_LY_ALREADY_INCLUDED))
+  (ly:error "spans.ly must be included before divisi.ly")
 )
 
 % Starts a divisi section. If we don't need to $yield to another voice,
@@ -72,10 +72,11 @@ unMarkedDivisi = #(define-music-function
     ; the given music object is a NoteEvent? That's easy, simply add the
     ; markup to its articulations.
     ; Same procedure for MultiMeasureRestMusic
-    (if (or (eq? musicType 'NoteEvent)
-            (eq? musicType 'MultiMeasureRestMusic)
-            (eq? musicType 'RestEvent)
-        )
+    (cond
+      ((or (eq? musicType 'NoteEvent)
+           (eq? musicType 'MultiMeasureRestMusic)
+           (eq? musicType 'RestEvent)
+      )
       (begin
         (set!
           (ly:music-property note 'articulations)
@@ -89,9 +90,9 @@ unMarkedDivisi = #(define-music-function
         )
         ; return the changed note
         note
-      )
-    ; for a chord, the markup is a part of the elements:
-    (if (eq? musicType 'EventChord)
+      ))
+      ; for a chord, the markup is a part of the elements:
+      ((eq? musicType 'EventChord)
       (begin
         (set!
           (ly:music-property note 'elements)
@@ -105,10 +106,10 @@ unMarkedDivisi = #(define-music-function
         )
         ; return the changed note.
         note
-      )
-    ; SequentialMusic constists of several parts, so we'll extract the
-    ; first, pass that recursively and then return the music.
-    (if (eq? musicType 'SequentialMusic)
+      ))
+      ; SequentialMusic constists of several parts, so we'll extract the
+      ; first, pass that recursively and then return the music.
+      ((eq? musicType 'SequentialMusic)
       (begin
         (list-set!
           (ly:music-property note 'elements)
@@ -116,28 +117,29 @@ unMarkedDivisi = #(define-music-function
           (firstMark markDir markText (first (ly:music-property note 'elements)))
         )
         note
-      )
-    (if (eq? musicType 'RelativeOctaveMusic)
+      ))
+      ((eq? musicType 'RelativeOctaveMusic)
       (begin
         (set!
           (ly:music-property note 'element)
           (firstMark markDir markText (ly:music-property note 'element))
         )
         note
-      )
-    (begin
-      (ly:warning "Unknown Type in firstMark: ~a" musicType)
-      (ly:warning "Only know how to handle:")
-      (ly:warning " NoteEvent,")
-      (ly:warning " EventChord,")
-      (ly:warning " MultiMeasureRestMusic,")
-      (ly:warning " RelativeOctaveMusic,")
-      (ly:warning " RestEvent,")
-      (ly:warning " SequentialMusic.")
-      (display-scheme-music note)
-      (newline)
-      (make-music 'SequentialMusic 'elements (list note))
-    )))))
+      ))
+      (else (begin
+        (ly:warning "Unknown Type in firstMark: ~a" musicType)
+        (ly:warning "Only know how to handle:")
+        (ly:warning " NoteEvent,")
+        (ly:warning " EventChord,")
+        (ly:warning " MultiMeasureRestMusic,")
+        (ly:warning " RelativeOctaveMusic,")
+        (ly:warning " RestEvent,")
+        (ly:warning " SequentialMusic.")
+        (display-scheme-music note)
+        (newline)
+        (make-music 'SequentialMusic 'elements (list note))
+      ))
+    )
   )
 )
 

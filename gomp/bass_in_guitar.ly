@@ -10,8 +10,8 @@
 )
 #(define BASS_IN_GUITAR_LY_ALREADY_INCLUDED #t)
 
-#(if (not (defined? 'SPANS_LY_ALREADY_INCLUDED))
-  #{ \include "spans.ly" #}
+$(if (not (defined? 'SPANS_LY_ALREADY_INCLUDED))
+  (ly:error "spans.ly must be included before bass_in_guitar.ly")
 )
 
 bassAchtva = \markup { \musicglyph #"pedal.*" }

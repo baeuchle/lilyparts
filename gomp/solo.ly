@@ -8,8 +8,8 @@
 )
 #(define SOLO_LY_ALREADY_INCLUDED #t)
 
-#(if (not (defined? 'SPANS_LY_ALREADY_INCLUDED))
-  #{ \include "spans.ly" #}
+$(if (not (defined? 'SPANS_LY_ALREADY_INCLUDED))
+  (ly:error "spans.ly must be included before solo.ly")
 )
 
 solo = #(define-music-function
