@@ -8,8 +8,35 @@ LILYEXE="$(which lilypond)"
 GITEXE="$(which git)"
 GITOPT="describe --tags --dirty --always"
 usegit=0 # 0: true, 1: false
-
 files=()
+
+function help {
+echo "
+
+lilysplit - compile lilypond files for several voices.
+
+USAGE:
+    $0 [options] file [file...]
+
+--color
+--nocolor
+        Color output from this script, or not
+--loglevel LEVEL
+        Sets the lilypond debug level.
+--lilyoptions OPT
+        Adds OPT to the options passed to lilypond
+--lilyexe EXE
+        Use EXE for lilypond system calls. This should be unnecessary if
+        lilypond is inside your \$PATH.
+--gitexe EXE
+        Use EXE for reading the version from git
+--gitopt OPT
+        Pass OPT to git. Default: "$GITOPT".
+--usegit (default), --nogit
+        Do or do not use git at all.
+
+"
+}
 
 while [[ $# -gt 0 ]]; do
   key="$1"
@@ -43,7 +70,7 @@ while [[ $# -gt 0 ]]; do
       usegit=1;
       shift;;
     --help)
-      echo "Help yourself, I can't, yet."
+      help
       exit 0;;
     --)
       shift;

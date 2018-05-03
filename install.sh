@@ -5,9 +5,9 @@ only_in_path=0
 forceoverwrite=-i
 
 function help {
-  echo -e <<"HELPEND"
+  echo "
 
-Installs lilysplit to a directory in $PATH.
+Installs lilysplit to a directory in \$PATH.
 
 --cleardirs
         Forget all predefined directories as install candidates.  Also forgets
@@ -26,7 +26,7 @@ Installs lilysplit to a directory in $PATH.
 --f
         Ask interactively (--i) or force (--f) overwrite of existing file.
 
-HELPEND
+"
 }
 
 
@@ -53,8 +53,8 @@ while [[ $# -gt 0 ]]; do
       forceoverwrite=-i
       shift;;
     --help)
-      help()
-      exit 1;
+      help
+      exit 1;;
     *)
       shift;;
   esac
