@@ -15,6 +15,8 @@
   (ly:set-option 'relative-includes #t)
 )
 
+#(ly:debug (ly:command-line-code))
+#(ly:debug (ly:command-line-options))
 #(use-modules (guile-user))
 % sets showAlle to true, except when disabled on command line.
 % then, sets showPart, showEins etc to that value, except defined differently on command line.
@@ -37,11 +39,7 @@
   (if (not (and #t (defined? 'showQuer))) (define showQuer showAlle)) (define hasQuer #f)
   (if (not (and #t (defined? 'showSaxo))) (define showSaxo showAlle)) (define hasSaxo #f)
   (if (not (and #t (defined? 'showSaxb))) (define showSaxb showAlle)) (define hasSaxb #f)
-)
-
-#(begin
-  (set-default-paper-size "a4")
-  (ly:set-option 'point-and-click #f)
+  (if (and #t (defined? 'mypapersize)) (set-default-paper-size mypapersize))
 )
 
 % Wir definieren für alle Instrumente eine *S*timme. Diese Variablen werden in stimmen.ly in Scores gepackt.

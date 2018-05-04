@@ -1,13 +1,19 @@
 #!/bin/bash
 
 [[ -t 1 ]] && makeColoredOutput=0 || makeColoredOutput=1;
-loglevel="BASIC"
-includedir="$(dirname $0)"
-LILYOPTS="--include $includedir"
+
 LILYEXE="$(which lilypond)"
+LILYOPTS=""
+LILYCODE=""
+loglevel="WARNING"
+pointandclick="-dno-point-and-click"
+papersize="a4"
+
 GITEXE="$(which git)"
 GITOPT="describe --tags --dirty --always"
 usegit=0 # 0: true, 1: false
+
+includedir="$(dirname $0)"
 files=()
 
 function help {
@@ -18,16 +24,27 @@ lilysplit - compile lilypond files for several voices.
 USAGE:
     $0 [options] file [file...]
 
+###THIS SCRIPT###
 --color
 --nocolor
         Color output from this script, or not
---loglevel LEVEL
-        Sets the lilypond debug level.
---lilyoptions OPT
-        Adds OPT to the options passed to lilypond
+###LILYPOND###
 --lilyexe EXE
         Use EXE for lilypond system calls. This should be unnecessary if
         lilypond is inside your \$PATH.
+--lilyoptions OPT
+        Adds OPT to the options passed to lilypond
+--loglevel LEVEL
+        Sets the lilypond debug level.
+        Possible values are: NONE, ERROR, WARNING (default), BASIC,
+        PROGRESS, INFO and DEBUG.
+--point-and-click, --pac
+--no-point-and-click, --nopac (default)
+        Create output with clickable note heads or don't
+--papersize FORMAT
+        Use this paper format, see lilypond documentation for valid
+        FORMATs. Default \"a4\"
+###GIT###
 --gitexe EXE
         Use EXE for reading the version from git
 --gitopt OPT
@@ -47,16 +64,27 @@ while [[ $# -gt 0 ]]; do
     --nocolor)
       makeColoredOutput=1;
       shift;;
-    --loglevel)
-      loglevel=$2;
-      LILYOPTS="$LILYOPTS --loglevel=$2";
+    --lilyexe)
+      LILYEXE="$2";
       shift; shift;;
     --lilyoptions)
       LILYOPTS="$LILYOPTS $2";
       shift; shift;;
-    --lilyexe)
-      LILYEXE="$2";
+    --lilycode)
+      LILYCODE="$LILYCODE $2";
       shift; shift;;
+    --loglevel)
+      loglevel=$2;
+      shift; shift;;
+    --papersize)
+      papersize=$2;
+      shift; shift;;
+    --point-and-click|--pac)
+      pointandclick="-dpoint-and-click"
+      shift;;
+    --no-point-and-click|--no-pac)
+      pointandclick="-dno-point-and-click"
+      shift;;
     --gitexe)
       GITEXE="$2";
       shift; shift;;
@@ -81,6 +109,8 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+LILYOPTS="--include $includedir $pointandclick --loglevel=$loglevel $LILYOPTS"
+LILYCODE="$LILYCODE (define mypapersize \"$papersize\")"
 files+=($*)
 
 ####COLORIZE OUTPUT####
@@ -116,6 +146,7 @@ if [ $usegit -eq 0 ]; then
     cd $includedir;
     lilyver="$($GITEXE $GITOPT)"
     lilyver="${lilyver/v/l}"
+    LILYCODE="$LILYCODE (define lilyver \"$lilyver\")"
     cd - >/dev/null
 fi
 
@@ -139,7 +170,7 @@ for D in "${files[@]}"; do
     # Normale Version:
     # (wir löschen später alles, was mit midirm aufhört)
     echo -e "${progressColor}Complete Score$noColor $whatwedoinfo"
-    $LILYEXE $LILYOPTS $nomidi -e "(begin (define lilyver \"$lilyver\") (define gitver \"$version\"))" $d.ly;
+    $LILYEXE $LILYOPTS $nomidi -e "$LILYCODE (define gitver \"$version\")" $d.ly;
     if [ $? -eq 1 ]; then
       echo -e "${errorColor}Compilation failed!$noColor"
       continue;
@@ -147,7 +178,7 @@ for D in "${files[@]}"; do
     mv $b-.pdf $b.pdf
     # MIDI-Version (wir löschen nachher auch das ps)
     echo -e "${progressColor}Midi Version$noColor $whatwedoinfo"
-    $LILYEXE $LILYOPTS --ps -dmidi-extension=midi -e "(begin (define lilyver \"$lilyver\") (define gitver \"$version\") (define makeMidi #t))" $d.ly;
+    $LILYEXE $LILYOPTS --ps -dmidi-extension=midi -e "$LILYCODE (define gitver \"$version\") (define makeMidi #t)" $d.ly;
     if [ $? -eq 1 ]; then
       echo -e "${errorColor}Compilation failed!$noColor"
       continue;
@@ -160,7 +191,7 @@ for D in "${files[@]}"; do
         show="show${namen[$s]}";
         if [ "$(grep -q $has $d.ly; echo $?)" == "0" ]; then
             echo -e "${progressColor}Excerpt $s$noColor: $excerptColor${namen[$s]}$noColor $whatwedoinfo"
-            $LILYEXE $LILYOPTS $nomidi -e "(begin (define lilyver \"$lilyver\") (define gitver \"$version\") (define showAlle #f) (define $show #t))" "$d.ly";
+            $LILYEXE $LILYOPTS $nomidi -e "$LILYCODE (define gitver \"$version\") (define showAlle #f) (define $show #t)" "$d.ly";
             if [ $? -eq 1 ]; then
               echo -e "${errorColor}Compilation failed!$noColor"
               break;
