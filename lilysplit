@@ -12,6 +12,7 @@ papersize="a4"
 GITEXE="$(which git)"
 GITOPT="describe --tags --dirty --always"
 usegit=0 # 0: true, 1: false
+showversion=1
 
 includedir="$(dirname $0)"
 files=()
@@ -100,11 +101,18 @@ while [[ $# -gt 0 ]]; do
     --help)
       help
       exit 0;;
+    --version)
+      showversion=0;
+      break;;
     --)
       shift;
       break;;
     *)
-      files+=($key);
+      if [[ "$key" == "-"* ]]; then
+        echo "Unknown option $key is ignored" >&2
+      else
+        files+=($key);
+      fi
       shift;;
   esac
 done
@@ -148,6 +156,10 @@ if [ $usegit -eq 0 ]; then
     lilyver="${lilyver/v/l}"
     LILYCODE="$LILYCODE (define lilyver \"$lilyver\")"
     cd - >/dev/null
+fi
+if [ $showversion -eq 0 ]; then
+  echo -e "This is ${headlineColor}lilysplit$noColor Version ${versionColor}$lilyver$noColor"
+  exit 0;
 fi
 
 nomidi="-dmidi-extension=midirm"
