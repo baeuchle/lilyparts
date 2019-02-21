@@ -203,7 +203,13 @@ for D in "${files[@]}"; do
         show="show${namen[$s]}";
         if [ "$(grep -q $has $d.ly; echo $?)" == "0" ]; then
             echo -e "${progressColor}Excerpt $s$noColor: $excerptColor${namen[$s]}$noColor $whatwedoinfo"
-            $LILYEXE $LILYOPTS $nomidi -e "$LILYCODE (define gitver \"$version\") (define showAlle #f) (define $show #t)" "$d.ly";
+            $LILYEXE $LILYOPTS $nomidi \
+                -e "$LILYCODE
+                    (define gitver \"$version\")
+                    (define showAlle #f)
+                    (define $show #t)
+                   " \
+                "$d.ly";
             if [ $? -eq 1 ]; then
               echo -e "${errorColor}Compilation failed!$noColor"
               break;

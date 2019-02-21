@@ -1,12 +1,21 @@
 %{
   Papier-Definitionen:
+                          +---------------------+
+                          |                     |
+                          |                     |
+                          |                     |
+                          |                     |
+                          |                     |
+                          | ver     ©         3 |
+                          +---------------------+
+
   +---------------------+ +---------------------+
   | Auszug Titel        | |        Titel Auszug |
   |                     | |                     |
   |                     | |                     |
   |                     | |                     |
   |                     | |                     |
-  | 2        ©          | |         ©         3 |
+  | 2        ©      ver | | ver     ©         3 |
   +---------------------+ +---------------------+
 
   \auszug muss definiert sein.
@@ -38,13 +47,13 @@
     \fill-line {
       \fromproperty #'page:page-number-string
       \fromproperty #'header:copyright
-      \line {}
+      \line { \gitver \lilyver }
     }
   }
   oddFooterMarkup = \markup {
     \abs-fontsize #8
     \fill-line {
-      \on-the-fly #first-page \line { \gitver \lilyver }
+      \line { \gitver \lilyver }
       \fromproperty #'header:copyright
       \fromproperty #'page:page-number-string
     }
