@@ -53,8 +53,7 @@
   oddFooterMarkup = \markup {
     \abs-fontsize #8
     \fill-line {
-      \on-the-fly #first-page \line { \gitver \lilyver }
-      \on-the-fly #not-first-page \line { \gitver }
+      \line { \gitver \on-the-fly #first-page { \lilyver } }
       \fromproperty #'header:copyright
       \fromproperty #'page:page-number-string
     }
