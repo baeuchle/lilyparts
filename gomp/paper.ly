@@ -6,7 +6,7 @@
                           |                     |
                           |                     |
                           |                     |
-                          | ver     ©         3 |
+                          | vverlver ©        3 |
                           +---------------------+
 
   +---------------------+ +---------------------+
@@ -15,7 +15,7 @@
   |                     | |                     |
   |                     | |                     |
   |                     | |                     |
-  | 2        ©      ver | | ver     ©         3 |
+  | 2        ©     vver | | vver    ©         3 |
   +---------------------+ +---------------------+
 
   \auszug muss definiert sein.
@@ -47,13 +47,14 @@
     \fill-line {
       \fromproperty #'page:page-number-string
       \fromproperty #'header:copyright
-      \line { \gitver \lilyver }
+      \line { \gitver }
     }
   }
   oddFooterMarkup = \markup {
     \abs-fontsize #8
     \fill-line {
-      \line { \gitver \lilyver }
+      \on-the-fly #first-page \line { \gitver \lilyver }
+      \on-the-fly #not-first-page \line { \gitver }
       \fromproperty #'header:copyright
       \fromproperty #'page:page-number-string
     }
