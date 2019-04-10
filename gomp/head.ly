@@ -3,6 +3,7 @@
 %}
 
 \version "2.18.2"
+\include "articulate.ly"
 
 #(if (defined? 'HEAD_LY_ALREADY_INCLUDED)
   (ly:warning "head.ly has already been included, crossing fingers!")

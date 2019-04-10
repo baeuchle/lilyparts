@@ -14,7 +14,7 @@
     unfoldRepeats verändert. So – ohne if und alles immer dabei – wird
     der Inhalt für das Layout weiter unten beibehalten.
   %}
-  \unfoldRepeats
+  \unfoldRepeats \articulate <<
   \new GrandStaff <<
     \new StaffGroup <<
       \gitEinsM
@@ -31,6 +31,7 @@
       \gitElecM
       \gitOktaM
     >>
+  >>
   >>
   \midi {}
 }
