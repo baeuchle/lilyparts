@@ -1,3 +1,19 @@
+%%% Function: markPadding
+%%% ============================================================
+%%% Adds padding between two marks, one of which may be added
+%%% the \rhythmMark function defined below.
+
+markPadding = #(define-music-function (parser location time) (fraction?)
+    #{
+        \cadenzaOn
+        \once \omit Score.TimeSignature
+        \set Score.timeSignatureFraction = #'(1 . 16)
+        s16 \bar ""
+        \once \omit Score.TimeSignature
+        \set Score.timeSignatureFraction = #time
+        \cadenzaOff
+    #}
+)
 %% http://lsr.di.unimi.it/LSR/Item?id=204
 %% see also http://lilypond.org/doc/v2.18/Documentation/internals/metronome_005fmark_005fengraver
 %% see also http://lilypond.org/doc/v2.18/Documentation/snippets/rhythms
@@ -23,6 +39,7 @@
 %%% ------------------------------------------------------------
 %%%  Comment: see below for predefined values for music1&2
 %%% ============================================================
+
 
 rhythmMarkStaffReduce = #-3
 rhythmMarkLabelFontSize = #-2
@@ -67,7 +84,8 @@ rhythmMark = #(define-music-function (parser location label musicI musicII ) (st
 
         } % line end
       } % markup end
-   #})
+   #}
+)
 
 %%% predefined ly:music-Variables for use
 %%% ============================================================
