@@ -40,6 +40,7 @@
   (if (not (and #t (defined? 'showQuer))) (define showQuer showAlle)) (define hasQuer #f)
   (if (not (and #t (defined? 'showSaxo))) (define showSaxo showAlle)) (define hasSaxo #f)
   (if (not (and #t (defined? 'showSaxb))) (define showSaxb showAlle)) (define hasSaxb #f)
+  (if (not (and #t (defined? 'showMast))) (define showMast showAlle)) (define hasMast #f)
   (if (and #t (defined? 'mypapersize)) (set-default-paper-size mypapersize))
 )
 
@@ -56,6 +57,8 @@ querFltS = {}
 saxAltAS = {}
 saxAltBS = {}
 percussS = {}
+masterRS = {}
+masterLS = {}
 
 \include "spans.ly"
 \include "divisi.ly"

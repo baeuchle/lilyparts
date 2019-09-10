@@ -3,6 +3,27 @@
    Musiksystem-Variablen (...M)
 %}
 
+masterR = {
+  \global
+  \clef "G"
+  \global
+  \masterRS
+}
+
+masterL = {
+  \global
+  \clef "F"
+  \global
+  \masterLS
+}
+
+masterM = \new PianoStaff <<
+  \set PianoStaff.instrumentName = "Master"
+  \set PianoStaff.shortInstrumentName = "M"
+  \new Staff = "masterRH" \masterR
+  \new Staff = "masterLH" \masterL
+>>
+
 gitDiviM = { \new Staff = "diviGit" \with {
      \remove "Time_signature_engraver"
      \RemoveEmptyStaves

@@ -11,6 +11,7 @@
     (if hasQuer (begin (if showQuer (define alls (+ alls 1))) (define oths (+ oths 1))) (define showQuer #f))
     (if hasSaxo (begin (if showSaxo (define alls (+ alls 1))) (define oths (+ oths 1))) (define showSaxo #f))
     (if hasSaxb (begin (if showSaxb (define alls (+ alls 1))) (define oths (+ oths 1))) (define showSaxb #f))
+    (if hasMast (begin (if showMast (define alls (+ alls 0))) (define oths (+ oths 0))) (define showMast #f))
 )
 
 #(begin
@@ -66,6 +67,7 @@
         (if showQuer (define suffix (string-append suffix "_q")))
         (if showSaxo (define suffix (string-append suffix "_s")))
         (if showSaxb (define suffix (string-append suffix "_sb")))
+        (if showMast (define suffix (string-append suffix "_master")))
     ))
     (if (> (string-length suffix) 0) (define suffix (substring suffix 1)))
 )
