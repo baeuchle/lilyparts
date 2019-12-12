@@ -1,5 +1,14 @@
 #!/bin/bash
 
+function cleanup {
+    if [ -z "$b" ]; then
+        return
+    fi
+    rm $b*midirm;
+    rm $b-midi.ps
+}
+trap cleanup EXIT
+
 [[ -t 1 ]] && makeColoredOutput=0 || makeColoredOutput=1;
 
 LILYEXE="$(which lilypond)"
@@ -218,6 +227,5 @@ for D in "${files[@]}"; do
             echo -e "${warningColor}No excerpt $s$noColor: $excerptColor${namen[$s]}$noColor"
         fi;
     done;
-    rm $b*midirm;
-    rm $b-midi.ps
+    cleanup();
 done
