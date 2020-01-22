@@ -59,5 +59,7 @@
       #(if showDrum percussM)
     >>
   >>
-  \layout {}
+  \layout {
+    \layout_variable
+  }
 }

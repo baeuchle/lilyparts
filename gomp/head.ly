@@ -66,5 +66,6 @@ masterLS = {}
 \include "bass_in_guitar.ly"
 \include "percussion_helpers.ly"
 \include "straight.ly"
+layout_variable = {}
 
 #(ly:set-option 'relative-includes includes_are_relative)
