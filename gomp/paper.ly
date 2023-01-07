@@ -23,6 +23,21 @@
   Diese Datei wird direkt in den \book {}-Block eingebunden.
 %}
 
+\header {
+  midititle = #(if (defined? 'pdftitle) pdftitle title)
+  pdftitle = #(string-append midititle " " suffix)
+  pdfsubtitle = \auszug
+  gv = \gitver
+  lv = \lilyver
+  keywords = #(string-append (if (defined? 'keywords) keywords "") " " gv " " lv)
+  pdfarr = #(if (defined? 'pdfarranger) pdfarranger (if (defined?  'arranger) arranger ""))
+  pdfarranger = #(
+    if (and (> (string-length pdfarr) 6) (equal?  (substring pdfarr 0 7) "Bearb. "))
+      (substring pdfarr 7)
+      pdfarr
+    )
+}
+
 \paper {
   evenHeaderMarkup = \markup {
     \abs-fontsize #8
