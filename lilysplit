@@ -4,8 +4,8 @@ function cleanup {
     if [ -z "$b" ]; then
         return
     fi
-    rm $b*midirm;
-    rm $b-midi.ps
+    rm -f $b*midirm;
+    rm -f $b-midi.ps
 }
 trap cleanup EXIT
 
