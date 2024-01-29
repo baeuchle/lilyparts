@@ -36,6 +36,11 @@
       (substring pdfarr 7)
       pdfarr
     )
+  arranger = #(
+    if (and (> (string-length pdfarr) 5) (equal?  (substring pdfarr 0 5) "Bearb"))
+      arranger
+      (string-append "Bearb. " arranger)
+    )
 }
 
 \paper {
