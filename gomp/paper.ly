@@ -24,20 +24,26 @@
 %}
 
 \header {
-  midititle = #(if (defined? 'pdftitle) pdftitle title)
+  midititle = #(if (defined? 'midititle) midititle (if (defined?  'pdftitle) pdftitle title))
   pdftitle = #(string-append midititle " " suffix)
   pdfsubtitle = \auszug
   gv = \gitver
   lv = \lilyver
   keywords = #(string-append (if (defined? 'keywords) keywords "") " " gv " " lv)
-  pdfarr = #(if (defined? 'pdfarranger) pdfarranger (if (defined?  'arranger) arranger ""))
+  % make sure arranger is present:
+  arranger = #(if (defined? 'arranger) arranger "")
+  pdfarr = #(if (defined? 'pdfarranger) pdfarranger arranger)
+  % pdfarranger without "Bearb. "
   pdfarranger = #(
     if (and (> (string-length pdfarr) 6) (equal?  (substring pdfarr 0 7) "Bearb. "))
       (substring pdfarr 7)
       pdfarr
     )
+  % arranger, if present, with "Bearb. "
   arranger = #(
-    if (and (> (string-length pdfarr) 5) (equal?  (substring pdfarr 0 5) "Bearb"))
+    if (or (= (string-length arranger) 0)
+    (and (> (string-length arranger) 5) (equal?  (substring arranger 0 5)
+    "Bearb")))
       arranger
       (string-append "Bearb. " arranger)
     )
