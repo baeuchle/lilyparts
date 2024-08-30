@@ -62,10 +62,8 @@
     \abs-fontsize #8
     \fill-line {
       \line {}
-      \on-the-fly #not-first-page
-      \fromproperty #'header:title
-      \on-the-fly #not-first-page
-      \auszug
+      \unless \on-first-page \fromproperty #'header:title
+      \unless \on-first-page \auszug
     }
   }
   evenFooterMarkup = \markup {
@@ -79,7 +77,7 @@
   oddFooterMarkup = \markup {
     \abs-fontsize #8
     \fill-line {
-      \line { \gitver \on-the-fly #first-page { \lilyver } }
+      \line { \gitver \if \on-first-page { \lilyver } }
       \fromproperty #'header:copyright
       \fromproperty #'page:page-number-string
     }

@@ -5,7 +5,7 @@
     \perc drums
 %}
 
-\version "2.18.2"
+\version "2.24.3"
 
 #(if (defined? 'PERCUSSION_HELPERS_LY_ALREADY_INCLUDED)
  (ly:warning "percussion_helpers.ly has already been included, crossing fingers!" "")

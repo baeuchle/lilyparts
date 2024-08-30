@@ -38,7 +38,7 @@
 }
 
 \score {
-  \new GrandStaff <<
+  <<
     #(if showMast masterM)
     \new StaffGroup <<
       #(if showQuer querFltM)

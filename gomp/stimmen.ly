@@ -41,7 +41,7 @@ gitDiviM = { \new Staff = "diviGit" \with {
 gitPercM = {
   \new DrumStaff = "percGit"  <<
     \global
-    \new DrumVoice { 
+    \new DrumVoice {
       \stopStaff
       \gitDiviS
     }
