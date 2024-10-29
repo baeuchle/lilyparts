@@ -103,6 +103,37 @@ gitBassM = \new Staff <<
   }
 >>
 
+chordNames = \new ChordNames {
+  \semiGermanChords
+  \set noChordSymbol = ##f
+  \set chordChanges = ##t
+  \set chordNameLowercaseMinor = ##t
+  \global
+  \gitRythS
+}
+
+chordRythm = \new Staff \with {
+  \override StaffSymbol.line-count = #1
+} <<
+  \new Voice \with {
+    \consists "Pitch_squash_engraver"
+  } {
+    \set Staff.instrumentName = "Rythm"
+    \set Staff.shortInstrumentName = "(R)"
+    \clef percussion
+    \set Staff.midiInstrument = #"acoustic guitar (nylon)"
+    \global
+    \improvisationOn
+    \chordmode { \gitRythS }
+    \improvisationOff
+  }
+>>
+
+gitRythM = <<
+  \chordNames
+  \chordRythm
+>>
+
 saxAltAM = \new Staff <<
   \new Voice {
     \set Staff.instrumentName = "Saxophon"

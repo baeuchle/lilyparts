@@ -25,7 +25,7 @@
 
 \header {
   midititle = #(if (defined? 'midititle) midititle (if (defined?  'pdftitle) pdftitle title))
-  pdftitle = #(string-append midititle " " suffix)
+  pdftitle = #(string-append midititle " " auszug)
   pdfsubtitle = \auszug
   gv = \gitver
   lv = \lilyver

@@ -24,6 +24,7 @@
       \gitVierM
       \gitDiviM
       \gitBassM
+      \chordRythm
       \percussM
       \gitPercM
       \querFltM
@@ -39,6 +40,9 @@
 
 \score {
   <<
+    #(if (and (= alls 1) showRyth) #{
+      \set Score.rehearsalMarkFormatter = #format-mark-box-alphabet
+    #})
     #(if showMast masterM)
     \new StaffGroup <<
       #(if showQuer querFltM)
@@ -54,6 +58,7 @@
       #(if showVier gitVierM)
       \gitDiviM
       #(if showBass gitBassM)
+      #(if showRyth gitRythM)
     >>
     \new StaffGroup <<
       #(if showDrum percussM)
