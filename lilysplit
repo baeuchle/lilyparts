@@ -13,6 +13,17 @@ class LilySong:
         self.stem = self.path.stem
         self.directory = self.path.parent
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        for patt in ('*midirm', '*-midi.ps', '*-tmp-*'):
+            for f in Path('.').glob(self.stem + patt):
+                f.unlink(missing_ok=True)
+
+    def __str__(self):
+        return str(self.stem)
+
     def correct_file(self, path):
         if path.is_dir():
             path = path.with_suffix('.ly')
@@ -42,13 +53,41 @@ class LilySong:
             return
         source.rename(Path(self.stem).with_suffix(suffix))
 
-    def __del__(self):
-        for patt in ('*midirm', '*-midi.ps', '*-tmp-*'):
-            for f in Path('.').glob(self.stem + patt):
-                f.unlink(missing_ok=True)
+class Compiler:
+    popendict = dict(stdout=PIPE, stderr=STDOUT, text=True)
 
-    def __str__(self):
-        return str(self.stem)
+    def __init__(self, song, lilycode, lilyopts):
+        self.song = song
+        self.sary = [args.lily_exe, *lilyopts, '-e', ' '.join(lilycode), song.path]
+        self.returncode = None
+        log.info("running %s", ' '.join([repr(str(x)) for x in self.sary]))
+
+    def execute(self):
+        lilyrun = Popen(self.sary, **self.popendict)
+        for outline in lilyrun.stdout:
+            print(outline, end='')
+        self.returncode = lilyrun.wait()
+
+class PdfCompiler(Compiler):
+    def __init__(self, song, lilycode, lilyopts):
+        lilyopts = lilyopts.copy()
+        lilyopts.append('-dmidi-extension=midirm')
+        super().__init__(song, lilycode, lilyopts)
+
+class MidiCompiler(Compiler):
+    def __init__(self, song, lilycode, lilyopts, midi_suffix):
+        lilyopts = lilyopts.copy()
+        lilyopts.append('--ps')
+        lilyopts.append(f'-dmidi-extension={midi_suffix[1:]}')
+        lilycode = lilycode.copy()
+        lilycode.append('(define-public makeMidi #t)')
+        super().__init__(song, lilycode, lilyopts)
+
+class VoiceCompiler(PdfCompiler):
+    def __init__(self, song, lilycode, lilyopts, voice):
+        lilycode = lilycode.copy()
+        lilycode.append(f'(define-public show{voice} #t)')
+        super().__init__(song, lilycode, lilyopts)
 
 def which(name):
     return Path(run(['which', name], capture_output=True, text=True).stdout.strip())
@@ -80,8 +119,8 @@ lilygroup.add_argument('--lily-code', nargs='*', action="extend", default=[])
 lilygroup.add_argument('--lily-loglevel', choices='NONE ERROR WARNING BASIC PROGRESS INFO DEBUG'.split(),
         default="WARNING")
 execgroup = parser.add_argument_group('Execution control')
-execgroup.add_argument('--color', action=argparse.BooleanOptionalAction, default=False) # nur bei interaktiver
-execgroup.add_argument('--log-level', choices='CRITICAL ERROR WARNING INFO DEBUG'.split(), default="WARNING")
+execgroup.add_argument('--color', action=argparse.BooleanOptionalAction, default=False, help="currently ignored")
+execgroup.add_argument('--log-level', choices='CRITICAL ERROR WARNING INFO DEBUG'.split(), default="INFO")
 gitgroup = parser.add_argument_group('Git execution')
 gitgroup.add_argument('--gitexe', default=which('git'), type=Path)
 gitgroup.add_argument('--gitopt', default='describe --tags --dirty --always'.split(), nargs='*')
@@ -110,54 +149,34 @@ if args.usegit:
     lilyver = gitdescribe(args.gitexe, args.gitopt, args.include_dir)
     args.lily_code.append(f'(define-public lilyver "{lilyver}")')
 
-nomidi = '-dmidi-extension=midirm'
-midi = '-dmidi-extension=' + args.midi_suffix[1:]
 versions = {}
 
 for song in args.files:
-    lilysong = LilySong(song)
-    log.info("Looking at %s", lilysong)
-    if lilysong.directory not in versions:
-        versions[lilysong.directory] = gitdescribe(args.gitexe, args.gitopt, lilysong.directory)
-        log.info("%s is in new directory %s with git version %s",
-                 lilysong, lilysong.directory, versions[lilysong.directory])
+    with LilySong(song) as lilysong:
+        log.info("Looking at %s", lilysong)
+        if lilysong.directory not in versions:
+            versions[lilysong.directory] = gitdescribe(args.gitexe, args.gitopt, lilysong.directory)
+            log.info("%s is in new directory %s with git version %s",
+                     lilysong, lilysong.directory, versions[lilysong.directory])
 
-    lilycode = args.lily_code.copy()
-    lilycode.append(f'(define-public gitver "{versions[lilysong.directory]}")')
-    sary = [args.lily_exe, *args.lily_opts, nomidi, '-e', ' '.join(lilycode), lilysong.path]
-    log.info("running %s", ' '.join([str(x) for x in sary]))
-    popendict = dict(stdout=PIPE, stderr=STDOUT, text=True)
-    lilyrun = Popen(sary, **popendict)
-    for outline in lilyrun.stdout:
-        print(outline, end='')
-    lilyrun.wait()
-    lilysong.move('-', '.pdf')
-    if lilyrun.returncode != 0:
-        raise SystemExit(lilyrun.returncode)
-    lilycode.append('(define-public makeMidi #t)')
-    sary = [args.lily_exe, *args.lily_opts, '--ps', midi, '-e', ' '.join(lilycode), lilysong.path]
-    log.info("running %s", ' '.join([str(x) for x in sary]))
-    lilyrun = Popen(sary, **popendict)
-    for outline in lilyrun.stdout:
-        print(outline, end='')
-    lilyrun.wait()
-    lilysong.move('-midi', args.midi_suffix)
-    if lilyrun.returncode != 0:
-        raise SystemExit(lilyrun.returncode)
+        lilycode = args.lily_code.copy()
+        lilycode.append(f'(define-public gitver "{versions[lilysong.directory]}")')
 
-    del lilycode[-1]
-    lilycode.append('(define-public showAlle #f)')
-    for voice in lilysong.voices:
-        lilycode.append(f'(define-public show{voice} #t)')
-        sary = [args.lily_exe, *args.lily_opts, nomidi, '-e', ' '.join(lilycode), lilysong.path]
-        log.info("running %s", ' '.join([str(x) for x in sary]))
-        lilyrun = Popen(sary, **popendict)
-        for outline in lilyrun.stdout:
-            print(outline, end='')
-        lilyrun.wait()
-        if lilyrun.returncode != 0:
-            raise SystemExit(lilyrun.returncode)
-        del lilycode[-1]
-    # need to delete lilysong before the end of python, because using
-    # Path won't work when python shuts down.
-    del lilysong
+        partc = PdfCompiler(lilysong, lilycode, args.lily_opts)
+        partc.execute()
+        lilysong.move('-', '.pdf')
+        if partc.returncode != 0:
+            raise SystemExit(partc.returncode)
+
+        midic = MidiCompiler(lilysong, lilycode, args.lily_opts, midi_suffix=args.midi_suffix)
+        midic.execute()
+        lilysong.move('-midi', args.midi_suffix)
+        if midic.returncode != 0:
+            raise SystemExit(midic.returncode)
+
+        lilycode.append('(define-public showAlle #f)')
+        for voice in lilysong.voices:
+            voicec = VoiceCompiler(lilysong, lilycode, args.lily_opts, voice=voice)
+            voicec.execute()
+            if voicec.returncode != 0:
+                raise SystemExit(voicec.returncode)
