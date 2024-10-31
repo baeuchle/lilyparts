@@ -7,31 +7,24 @@
 
 % Noten:
 \score {
-  % Bei MIDI ist immer jeder Output aktiviert.
-  %{
-    Technisch gesehen geht das leider nicht anders: Wenn hier auch
-    if-Anweisungen stünden, werden die enthaltenen Variablen durch das
-    unfoldRepeats verändert. So – ohne if und alles immer dabei – wird
-    der Inhalt für das Layout weiter unten beibehalten.
-  %}
   \unfoldRepeats \articulate <<
   \new GrandStaff <<
     \new StaffGroup <<
-      \masterM
-      \gitEinsM
-      \gitZweiM
-      \gitDreiM
-      \gitVierM
+      #(if hasMast #{ \masterM #})
+      #(if hasEins #{ \gitEinsM #})
+      #(if hasZwei #{ \gitZweiM #})
+      #(if hasDrei #{ \gitDreiM #})
+      #(if hasVier #{ \gitVierM #})
+      #(if hasBass #{ \gitBassM #})
+      #(if hasRyth #{ \chordRythm #})
+      #(if hasDrum #{ \percussM #})
+      #(if hasQuer #{ \querFltM #})
+      #(if hasSaxo #{ \saxAltAM #})
+      #(if hasSaxb #{ \saxAltBM #})
+      #(if hasElec #{ \gitElecM #})
+      #(if hasQuer #{ \gitOktaM #})
       \gitDiviM
-      \gitBassM
-      \chordRythm
-      \percussM
       \gitPercM
-      \querFltM
-      \saxAltAM
-      \saxAltBM
-      \gitElecM
-      \gitOktaM
     >>
   >>
   >>
