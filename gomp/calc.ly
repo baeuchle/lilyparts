@@ -2,8 +2,8 @@
   (define (count-if lst)
     (if (null? lst) 0 (+ (if (car lst) 1 0) (count-if (cdr lst))))
   )
-  (define gits (count-if (list hasEins hasZwei hasDrei hasVier)))
-  (define oths (count-if (list hasBass hasRyth hasDrum hasOkta hasElec hasQuer hasSaxo hasSaxb hasMast)))
+  (define gits (count-if (list hasEins hasZwei hasDrei hasVier hasRyth)))
+  (define oths (count-if (list hasBass hasDrum hasOkta hasElec hasQuer hasSaxo hasSaxb hasMast)))
   (define alls (count-if (list
     (and showEins hasEins)
     (and showZwei hasZwei)
@@ -57,9 +57,6 @@
   (define instruments (append-if instruments (> oths 0) " mit ")) ; no comma at beginning...
   (define instruments (append-if instruments hasBass    "Bass"))
   (define mehr (or hasBass mehr))
-  (define instruments (append-if instruments (and hasRyth mehr) ", "))
-  (define instruments (append-if instruments hasRyth "Rhythmusgitarre"))
-  (define mehr (or hasRyth mehr))
   (define instruments (append-if instruments (and hasDrum mehr) ", "))
   (define instruments (append-if instruments hasDrum "Percussion"))
   (define mehr (or hasDrum mehr))
