@@ -16,7 +16,7 @@
       #(if hasDrei #{ \gitDreiM #})
       #(if hasVier #{ \gitVierM #})
       #(if hasBass #{ \gitBassM #})
-      #(if hasRyth #{ \chordRythm #})
+      #(if hasRyth #{ \chordNames #})
       #(if hasDrum #{ \percussM #})
       #(if hasQuer #{ \querFltM #})
       #(if hasSaxo #{ \saxAltAM #})

@@ -3,6 +3,8 @@
    Musiksystem-Variablen (...M)
 %}
 
+\include "chords.ly"
+
 masterR = {
   \global
   \clef "G"
@@ -108,6 +110,7 @@ chordNames = \new ChordNames {
   \set noChordSymbol = ##f
   \set chordChanges = ##t
   \set chordNameLowercaseMinor = ##t
+  \set Staff.midiInstrument = #"acoustic guitar (nylon)"
   \global
   \gitRythS
 }
@@ -121,10 +124,9 @@ chordRythm = \new Staff \with {
     \set Staff.instrumentName = "Rythm"
     \set Staff.shortInstrumentName = "(R)"
     \clef percussion
-    \set Staff.midiInstrument = #"acoustic guitar (nylon)"
     \global
     \improvisationOn
-    \chordmode { \gitRythS }
+    \baseNoteChord \gitRythS
     \improvisationOff
   }
 >>
