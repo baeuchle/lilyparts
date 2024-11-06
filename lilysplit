@@ -33,11 +33,10 @@ class LilySong:
             for line in peek:
                 if not line.strip():
                     continue
-                if line[:10] == r'\version "': # first non-empty line
+                if line[:28] == r'\include "lilyparts/head.ly"':
                     self.read_voices(peek)
                     return path
-                else:
-                    return self.correct_file(path.parent)
+        return self.correct_file(path.parent)
 
     def read_voices(self, peek):
         for line in peek:
