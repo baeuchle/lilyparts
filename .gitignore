@@ -6,4 +6,4 @@ __pycache__
 *.egg-info/
 build/
 venv*/
-lilyparts/_version.py
+lilysplit/_version.py
