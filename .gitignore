@@ -1,3 +1,9 @@
 .install_destination
 *.pdf
 *.midi
+__pycache__
+*~
+*.egg-info/
+build/
+venv*/
+lilyparts/_version.py
