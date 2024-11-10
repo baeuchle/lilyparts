@@ -1,3 +1,5 @@
+__copyright__ = "© CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE"
+
 import sys
 from .main import split
 
