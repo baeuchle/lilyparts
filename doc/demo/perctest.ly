@@ -1,6 +1,6 @@
-\include "gomp/head.ly"
+\include "lilyparts/head.ly"
 hasEins = ##t
-\include "gomp/calc.ly"
+\include "lilyparts/calc.ly"
 #(set-global-staff-size 32)
 
 #(define percTable '(
@@ -19,12 +19,12 @@ gitEinsS = \relative c {
   \bar "|."
 }
 gitDiviS = { s1*4 }
-\include "gomp/stimmen.ly"
+\include "lilyparts/stimmen.ly"
 
 \book {
   \header {
     title = "Test für Perkussive Gitarren"
   }
-  \include "gomp/paper.ly"
-  \include "gomp/score.ly"
+  \include "lilyparts/paper.ly"
+  \include "lilyparts/score.ly"
 }

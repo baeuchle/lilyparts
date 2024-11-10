@@ -1,6 +1,6 @@
-\include "gomp/head.ly"
+\include "lilyparts/head.ly"
 hasEins = ##t
-\include "gomp/calc.ly"
+\include "lilyparts/calc.ly"
 #(set-global-staff-size 32)
 
 #(define percTable '((hihat cross #f 3)))
@@ -50,12 +50,12 @@ gitEinsS = \relative c {
   \variableAcc
   \diviMark #0 \diviMark #1 c4-> % put two marks
 }
-\include "gomp/stimmen.ly"
+\include "lilyparts/stimmen.ly"
 
 \book {
   \header {
     title       = "functions from head.ly"
   }
-  \include "gomp/paper.ly"
-  \include "gomp/score.ly"
+  \include "lilyparts/paper.ly"
+  \include "lilyparts/score.ly"
 }

@@ -1,7 +1,7 @@
-\include "gomp/head.ly"
+\include "lilyparts/head.ly"
 hasEins = ##t
 hasZwei = ##t
-\include "gomp/calc.ly"
+\include "lilyparts/calc.ly"
 #(set-global-staff-size 32)
 
 melodie = { c4 c c c }
@@ -47,13 +47,13 @@ gitZweiS = \relative c' {
 }
 gitDiviS = { s1*18 }
 
-\include "gomp/stimmen.ly"
+\include "lilyparts/stimmen.ly"
 
 \book {
   \header {
     title       = "Ossia-Test"
     instrument  = \instruments
   }
-  \include "gomp/paper.ly"
-  \include "gomp/score.ly"
+  \include "lilyparts/paper.ly"
+  \include "lilyparts/score.ly"
 }
