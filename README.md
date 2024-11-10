@@ -29,7 +29,7 @@ gitZweiS = \relative c  \repeat unfold 8 { c4 g c b c1 }
     composer = "Bjørn Bäuchle"
     tagline = ##f
   }
-  \include "lilyparts/paper.ly"
+  \include "lilyparts/paper.ly" % optional, see below
   \include "lilyparts/score.ly"
 }
 ```
@@ -57,5 +57,5 @@ The order of the includes included in the snippet is important:
 4. lilyparts/stimmen.ly creates the voice variables which are used
    later in score.ly
 5. lilyparts/paper.ly prepares the paper canvas with titles, version
-   information and file suffix
+   information etc. Strictly speaking, it isn't necessary.
 6. lilyparts/score.ly actually engraves the score and/or midi file.

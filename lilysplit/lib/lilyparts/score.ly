@@ -7,6 +7,7 @@
     Diese Datei wird direkt in den \book {}-Block eingebunden.
 %}
 
+\bookOutputSuffix \suffix
 % Noten:
 \score {
   \unfoldRepeats \articulate <<
