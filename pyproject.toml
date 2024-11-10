@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lilysplit"
+description = "Lilyparts: Script and Lilypond library for making parts from guitar orchestra scores"
+authors = [{ name="Bjørn Bäuchle", email="lilyparts@frankfurtium.de" }]
+maintainers = [{ name="Bjørn Bäuchle", email="lilyparts@frankfurtium.de" }]
+
+license = { file="LICENSE" }
+dynamic = ["version"]
+requires-python = ">= 3.9"
+dependencies = []
+keywords = []
+classifiers = [
+]
+
+[project.scripts]
+lilysplit = "lilysplit:split"
+
+[tool.setuptools_scm]
+version_file = "lilysplit/_version.py"
+tag_regex = '^[LlvV](?P<version>\d+(?:\.\d+){0,3}[^\+]*)$'
