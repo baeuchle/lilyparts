@@ -106,7 +106,10 @@ gitBassM = \new Staff <<
 >>
 
 chordNames = \new ChordNames {
-  \semiGermanChords
+  % the next two lines are basically \semiGermanChords, just the bass
+  % note obeys the same rules as the chord name proper and is uppercase.
+  \set chordRootNamer = #(chord-name->german-markup #f)
+  \set chordNoteNamer = #(chord-name->german-markup #f)
   \set noChordSymbol = ##f
   \set chordChanges = ##t
   \set chordNameLowercaseMinor = ##t
