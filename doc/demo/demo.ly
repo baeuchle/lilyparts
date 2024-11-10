@@ -16,5 +16,6 @@ gitZweiS = \relative c  \repeat unfold 8 { c4 g c b c1 }
     composer = "Bjørn Bäuchle"
     tagline = ##f
   }
+  % \include "lilyparts/paper.ly" % optional, see explanation
   \include "lilyparts/score.ly"
 }

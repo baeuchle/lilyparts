@@ -1,6 +1,4 @@
 .install_destination
-*.pdf
-*.midi
 __pycache__
 *~
 *.egg-info/
