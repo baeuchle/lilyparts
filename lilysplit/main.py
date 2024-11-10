@@ -16,21 +16,6 @@ def gitdescribe(git_exe, git_opt, directory):
 def which(name):
     return Path(run(['which', name], capture_output=True, text=True).stdout.strip())
 
-def default_config_home():
-    from os import environ
-    xdghome = environ.get('XDG_CONFIG_HOME', False)
-    if environ.get('XDG_CONFIG_HOME', False):
-        return Path(environ.get('XDG_CONFIG_HOME'))
-    home = environ.get('HOME', False)
-    if not home:
-        user = os.environ.get('USER', os.environ.get('LOGNAME', False))
-        if not user:
-            return ''
-        home = Path('/home') / user
-    else:
-        home = Path(home)
-    return home / '.config'
-
 def split():
     parser = argparse.ArgumentParser()
     lilygroup = parser.add_argument_group('Lilypond execution')
@@ -46,7 +31,7 @@ def split():
     gitgroup.add_argument('--gitexe', default=which('git'), type=Path)
     gitgroup.add_argument('--gitopt', default='describe --tags --dirty --always'.split(), nargs='*')
     gitgroup.add_argument('--usegit', action=argparse.BooleanOptionalAction, default=True)
-    parser.add_argument('--include-dir', type=Path, default=default_config_home() / 'lilyparts')
+    parser.add_argument('--include-dir', type=Path, default=Path(__file__).parent / 'lib')
     parser.add_argument('--papersize', default="a4")
     parser.add_argument('--point_and_click', '--pac', action=argparse.BooleanOptionalAction,
             default=False)
