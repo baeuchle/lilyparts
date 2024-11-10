@@ -12,7 +12,7 @@ license = { file="LICENSE" }
 dynamic = ["version"]
 requires-python = ">= 3.9"
 dependencies = []
-keywords = []
+keywords = ["lilypond", "score", "music", "guitar orchestra"]
 classifiers = [
 ]
 
