@@ -9,15 +9,22 @@ from .midicompiler import MidiCompiler
 from .pdfcompiler import PdfCompiler
 from .voicecompiler import VoiceCompiler
 
-def gitdescribe(git_exe, git_opt, directory):
-    return run([git_exe, '-C', directory, *git_opt], capture_output=True,
-            text=True).stdout.strip()
+py_dir = Path(__file__).parent
+def gitdescribe(directory):
+    return run(['git', '-C', directory, 'describe', '--tags', '--dirty', '--always'],
+               capture_output=True, text=True).stdout.strip()
+
+try:
+    from ._version import __version__
+except ImportError:
+    __version__ = gitdescribe(py_dir)
 
 def which(name):
     return Path(run(['which', name], capture_output=True, text=True).stdout.strip())
 
 def split():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
     lilygroup = parser.add_argument_group('Lilypond execution')
     lilygroup.add_argument('--lily-exe', default=which('lilypond'), type=Path)
     lilygroup.add_argument('--lily-opts', nargs='*', action="extend", default=[])
@@ -28,10 +35,7 @@ def split():
     execgroup.add_argument('--color', action=argparse.BooleanOptionalAction, default=False, help="currently ignored")
     execgroup.add_argument('--log-level', choices='CRITICAL ERROR WARNING INFO DEBUG'.split(), default="INFO")
     gitgroup = parser.add_argument_group('Git execution')
-    gitgroup.add_argument('--gitexe', default=which('git'), type=Path)
-    gitgroup.add_argument('--gitopt', default='describe --tags --dirty --always'.split(), nargs='*')
-    gitgroup.add_argument('--usegit', action=argparse.BooleanOptionalAction, default=True)
-    parser.add_argument('--include-dir', type=Path, default=Path(__file__).parent / 'lib')
+    parser.add_argument('--include-dir', type=Path, default=py_dir / 'lib')
     parser.add_argument('--papersize', default="a4")
     parser.add_argument('--point_and_click', '--pac', action=argparse.BooleanOptionalAction,
             default=False)
@@ -46,15 +50,12 @@ def split():
     args.lily_opts.extend(['--include', str(args.include_dir)])
     args.lily_opts.extend(['--loglevel', args.lily_loglevel])
     args.lily_code.append(f'(define-public mypapersize "{args.papersize}")')
+    args.lily_code.append(f'(define-public lilyver "l{__version__}")')
 
     if not args.lily_exe.exists():
         log.error("lilypond not found, please use --lily_exe /path/to/lilypond")
         raise SystemExit(1)
     Compiler.lily_exe = args.lily_exe
-
-    if args.usegit:
-        lilyver = gitdescribe(args.gitexe, args.gitopt, args.include_dir)
-        args.lily_code.append(f'(define-public lilyver "{lilyver}")')
 
     versions = {}
 
@@ -62,7 +63,7 @@ def split():
         with LilySong(song) as lilysong:
             log.info("Looking at %s", lilysong)
             if lilysong.directory not in versions:
-                versions[lilysong.directory] = gitdescribe(args.gitexe, args.gitopt, lilysong.directory)
+                versions[lilysong.directory] = gitdescribe(lilysong.directory)
                 log.info("%s is in new directory %s with git version %s",
                          lilysong, lilysong.directory, versions[lilysong.directory])
 
