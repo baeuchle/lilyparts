@@ -1,3 +1,5 @@
+% © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+
 %{
   Provides
     \splitStaffBarLine shows arrows pointing up and down where the

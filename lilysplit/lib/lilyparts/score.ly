@@ -1,3 +1,5 @@
+% © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+
 %{
     Setzt den Inhalt der Variablen \music in je einen Score für Noten- und
     einen für MIDI-Eport.

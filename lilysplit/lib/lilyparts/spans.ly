@@ -1,3 +1,5 @@
+% © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+
 %{
   Provides \namedSpan "text" ly:music which sets a sequence of music
   into some kind of spanners which have a given name.

@@ -1,3 +1,5 @@
+% © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+
 %{
    Diese Datei macht aus ausgewählten Stimmen-Variablen (...S)
    Musiksystem-Variablen (...M)

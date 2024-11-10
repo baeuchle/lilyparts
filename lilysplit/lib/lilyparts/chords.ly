@@ -1,3 +1,5 @@
+% © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+
 %{
     baseNoteChord copies music and changes all chords (in the copy) to
     only the first note.

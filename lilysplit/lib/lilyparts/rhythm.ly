@@ -1,3 +1,5 @@
+% © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+
 %%% Function: markPadding
 %%% ============================================================
 %%% Adds padding between two marks, one of which may be added

@@ -1,3 +1,5 @@
+% © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+
 #(if (defined? 'ATTACCA_LY_ALREADY_INCLUDED)
  (ly:warning "attacca.ly has already been included, crossing fingers!")
 )

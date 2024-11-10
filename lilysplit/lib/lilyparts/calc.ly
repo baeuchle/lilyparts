@@ -1,3 +1,5 @@
+% © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+
 #(begin
   (define (count-if lst)
     (if (null? lst) 0 (+ (if (car lst) 1 0) (count-if (cdr lst))))
