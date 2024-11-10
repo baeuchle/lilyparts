@@ -1,4 +1,5 @@
 % © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+\version "2.24.3"
 
 \include "lilyparts/head.ly"
 hasEins = ##t
@@ -46,7 +47,7 @@ gitEinsS = \relative c {
   \diviMark #6 \relative c' { c,-> }
   \diviMark #7 \relative c'' { <c,, e>-> }
   \diviMark #8 r4->
-  \diviMark #9 R1\fermataMarkup
+  \diviMark #9 R1\fermata
   \diviMark #1 \variableAcc % make sure \variableAcc is not changed:
   \diviMark #2 \variableAcc
   \variableAcc
