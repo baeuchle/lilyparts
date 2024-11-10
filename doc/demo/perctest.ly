@@ -1,3 +1,5 @@
+% © CC-BY-SA 4.0 Bjørn Bäuchle, see file LICENSE
+
 \include "lilyparts/head.ly"
 hasEins = ##t
 \include "lilyparts/calc.ly"
