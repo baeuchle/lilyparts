@@ -126,7 +126,7 @@ chordRythm = \new Staff \with {
   \new Voice \with {
     \consists "Pitch_squash_engraver"
   } {
-    \set Staff.instrumentName = "Rythm"
+    \set Staff.instrumentName = "Rhythm"
     \set Staff.shortInstrumentName = "(R)"
     \clef percussion
     \global

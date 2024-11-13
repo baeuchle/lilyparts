@@ -88,7 +88,7 @@
   (define auszug (append-if auszug (and (not is-part) showDrei) "Git. 3 "))
   (define auszug (append-if auszug (and (not is-part) showVier) "Git. 4 "))
   (define auszug (append-if auszug (and (not is-part) showBass) "Bass "))
-  (define auszug (append-if auszug (and (not is-part) showRyth) "Rythm "))
+  (define auszug (append-if auszug (and (not is-part) showRyth) "Rhythm "))
   (define auszug (append-if auszug (and (not is-part) showDrum) "Percussion "))
   (define auszug (append-if auszug (and (not is-part) showOkta) "Oktavgitarre "))
   (define auszug (append-if auszug (and (not is-part) showElec) "E-Gitarre "))
