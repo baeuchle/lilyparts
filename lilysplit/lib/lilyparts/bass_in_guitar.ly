@@ -4,7 +4,7 @@
   Provides
     \bassAchtva (as markup)
     \bassAchtvaExplain (also markup)
-    \bassTacet music
+    \bassTacet N? music
 %}
 
 #(if (defined? 'BASS_IN_GUITAR_LY_ALREADY_INCLUDED)
@@ -29,8 +29,7 @@ bassAchtva = \markup { \musicglyph #"pedal.*" }
 )
 
 bassTacet = #(define-music-function
-  (parser location musix)
-  (ly:music?)
-  #{ \namedSpan "Bass tacet" #musix #}
+  (middleCPos musix)
+  ((number? 1) ly:music?)
+  (namedSpan "Bass tacet" middleCPos musix)
 )
-

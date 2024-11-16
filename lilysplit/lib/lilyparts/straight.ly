@@ -2,7 +2,7 @@
 
 %{
   Provides
-    \straight music
+    \straight N? music
 %}
 
 #(if (defined? 'STRAIGHT_LY_ALREADY_INCLUDED)
@@ -15,8 +15,7 @@ $(if (not (defined? 'SPANS_LY_ALREADY_INCLUDED))
 )
 
 straight = #(define-music-function
-  (parser location musix)
-  (ly:music?)
-  #{ \namedSpan "Straight" #musix #}
+  (middleCPos musix)
+  ((number? 1) ly:music?)
+  (namedSpan "Straight" middleCPos musix)
 )
-
