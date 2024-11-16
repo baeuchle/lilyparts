@@ -4,54 +4,16 @@
 \include "lilyparts/head.ly"
 hasEins = ##t
 \include "lilyparts/calc.ly"
-#(set-global-staff-size 32)
+#(set-global-staff-size 24)
+\include "test-helper.ly"
 
 #(define percTable '((hihat cross #f 3)))
 
-global = {}
-variable = { c4 }
-variableAcc = { c4-> }
-gitEinsS = \relative c {
-  \namedSpan "namedSpan" { c c c c }
-  \solo { c c c c }
-  \bassTacet { c c c c }
+gitEinsS = \relative c' {
+  \perc { \mark\default c^\markup "(Perc)" \drummode { sn2 hh4 } }
+  \mark\default
+  c^\bassAchtva c^\bassAchtva c^\bassAchtva c^\bassAchtva
   \break
-  \straight { c c c c }
-  \perc { c^\markup "(Perc)" \drummode { sn2 hh4 } }
-  { c^\bassAchtva c^\bassAchtva c^\bassAchtva c^\bassAchtva }
-  \break
-  c8
-  \diviMark #0 c8
-  \diviMark #1 <c e>8
-  \diviMark #2 { c8 }
-  \diviMark #3 { <c e>4 }
-  \diviMark #4 \relative c c
-  \diviMark #5 \relative c, <c' e>
-  \diviMark #6 \relative c' { c, }
-  \diviMark #7 \relative c'' { <c,, e> }
-  \diviMark #8 r4
-  \diviMark #9 R1
-  \diviMark #1 \variable % make sure \variable is not changed:
-  \diviMark #2 \variable
-  \variable
-  % now the same, but with accented notes:
-  \diviMark #0 \diviMark #1 c4 % put two marks
-  \break
-  c8->
-  \diviMark #0 c8->
-  \diviMark #1 <c e>8->
-  \diviMark #2 { c8-> }
-  \diviMark #3 { <c e>4-> }
-  \diviMark #4 \relative c c->
-  \diviMark #5 \relative c, <c' e>->
-  \diviMark #6 \relative c' { c,-> }
-  \diviMark #7 \relative c'' { <c,, e>-> }
-  \diviMark #8 r4->
-  \diviMark #9 R1\fermata
-  \diviMark #1 \variableAcc % make sure \variableAcc is not changed:
-  \diviMark #2 \variableAcc
-  \variableAcc
-  \diviMark #0 \diviMark #1 c4-> % put two marks
 }
 \include "lilyparts/stimmen.ly"
 
@@ -61,4 +23,15 @@ gitEinsS = \relative c {
   }
   \include "lilyparts/paper.ly"
   \include "lilyparts/score.ly"
+  \markuplist {
+    \wordwrap-lines \bold { Test various lilypart functions: }
+    \wordwrap-lines { \bold\box{A}: Test "\perc". Should be one normal note (4), one slash (2), one cross (4). }
+    \wordwrap-lines { \hspace #2 \bold { This emits two expected \with-color #(x11-color 'orange) warnings: } }
+    \wordwrap-lines { \hspace #4 1st note (c): \bold {This is not a drum! MIDI output unspecified} (still printed: ok) }
+    \wordwrap-lines { \hspace #4 2nd note (sn): \bold {No predefined NoteHead found for snare} (replaced with slash: ok) }
+    \wordwrap-lines { \hspace #2 \bold { \with-color #red { and one unexpected warning: } } }
+    \wordwrap-lines { \hspace #4 \bold { WARNING: Unknown Type in transformDrumNotes: RehearsalMarkEvent }}
+    \wordwrap-lines { \hspace #4 This is an open issue. }
+    \wordwrap-lines { \bold\box{B}: Use "\bassAchtva" four times }
+  }
 }
