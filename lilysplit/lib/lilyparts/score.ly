@@ -26,7 +26,6 @@
       #(if hasSaxb #{ \saxAltBM #})
       #(if hasElec #{ \gitElecM #})
       #(if hasQuer #{ \gitOktaM #})
-      \gitDiviM
       \gitPercM
     >>
   >>
