@@ -21,161 +21,125 @@ percLines = #2
 % close to your drum definition.
 #(define percTable '())
 
+#(define (setMiddleC notePosition)
+  (ly:debug "setMiddleC[~a]" notePosition)
+  (context-spec-music
+    (make-property-set 'middleCPosition notePosition)
+    'Voice
+  )
+)
+
 #(define (unsetMiddleC) (begin
   (ly:debug "unsetMiddleC[]")
-  (make-music
-    'ContextSpeccedMusic
-    'context-type 'Voice
-    'add-info "Inserted by unsetMiddleC"
-    'element (make-music
-      'PropertyUnset
-      'symbol 'middleCPosition
-    )
-  )
-))
-#(define (setMiddleC notePosition) (begin
-  (ly:debug "setMiddleC[~a]" notePosition)
-  (make-music
-    'ContextSpeccedMusic
-    'context-type 'Voice
-    'add-info "Inserted by setMiddleC"
-    'element (make-music
-      'PropertySet
-      'value notePosition
-      'symbol 'middleCPosition
-    )
+  (context-spec-music
+    (make-property-unset 'middleCPosition)
+    'Voice
   )
 ))
 
-#(define (setNoteHead value) (begin
+#(define (setNoteHead value)
   (ly:debug "setNoteHead[~a]" value)
-  (make-music
-    'ContextSpeccedMusic
-    'context-type 'Bottom
-    'add-info "Inserted by setNoteHead"
-    'element (make-music
-      'OverrideProperty
-      'pop-first #t
-      'grob-property-path (list (quote style))
-      'grob-value value
-      'symbol 'NoteHead
-    )
+  (context-spec-music
+    (make-grob-property-set 'NoteHead 'style value)
+    'Bottom
   )
-))
+)
 
-#(define (inspect key value) (begin
+#(define (revertNoteHead)
+  (context-spec-music
+    (make-grob-property-revert 'NoteHead 'style)
+    'Bottom
+  )
+)
+
+#(define (inspect key value)
    (ly:debug "Key: ~a; Value: ~a" key value)
-))
+)
 
 #(define (transformDrumNotes drums percHash)
-  (let ((musicType (ly:music-property drums 'name)))
-    (if (eq? musicType 'SequentialMusic)
-      (make-music musicType
-        'elements (map (lambda (x) (transformDrumNotes x percHash)) (ly:music-property drums 'elements))
-        'add-info "inserted by transformDrumNotes with SequentialMusic"
-      )
-    (if (eq? musicType 'UnfoldedRepeatedMusic)
-      (begin
-        (ly:music-set-property! drums 'element (transformDrumNotes (ly:music-property drums 'element) percHash))
-        drums
-      )
-    (if (eq? musicType 'NoteEvent)
-      (begin
-        (make-music 'SequentialMusic
-          'add-info "inserted by transformDrumNotes with NoteEvent"
-          'elements (list
-            (if (hashq-ref percHash (ly:music-property drums 'drum-type))
-              (begin
-                (ly:music-set-property! drums 'add-info "This drum-type has a defined NoteHead")
-                (setNoteHead (list-ref (hashq-ref percHash (ly:music-property drums 'drum-type)) 0))
-              )
-              (begin
-                (if (eq? (ly:music-property drums 'drum-type 'invalid) 'invalid)
-                  (begin
-                    (ly:warning "This is not a drum! MIDI output unspecified")
-                    (setNoteHead 'default)
-                  )
-                  (begin
-                    (ly:warning "No predefined NoteHead found for ~a" (ly:music-property drums 'drum-type 'unspecified-drum-type))
-                    (setNoteHead 'slash)
-                  )
-                )
-              )
-            )
-            (if (hashq-ref percHash (ly:music-property drums 'drum-type))
-              (setMiddleC (list-ref (hashq-ref percHash (ly:music-property drums 'drum-type)) 2))
-              (if (eq? (ly:music-property drums 'drum-type 'invalid) 'invalid)
-                (unsetMiddleC)
-                (setMiddleC 0)
-              )
-            )
-            (begin
-              drums
-            )
-          )
-        )
-      )
-    (if (eq? musicType 'RestEvent)
-      ;; Don't change rests.
-      drums
+  (let ((musicType (ly:music-property drums 'name))
+        (elementList (ly:music-property drums 'elements))
+        (elementItem (ly:music-property drums 'element))
+        (drumType (ly:music-property drums 'drum-type))
+        (drumProp (hashq-ref percHash (ly:music-property drums 'drum-type)))
+       )
+    (ly:debug "<transformDrumNotes ~a>" musicType)
     (if (eq? musicType 'EventChord)
-      ;; The problem with EventChord is that I would have to set and reset
-      ;; middleCPosition twice inside one chord. Simply recursing like in
-      ;; SequentialMusic yields a missing note, which isn't what we want
-      ;; either. Therefore, for the time being, EventChords are forbidden.
-      (begin
-        (ly:error "ERROR: Invalid Type in transformDrumNotes: ~a is not supported" musicType)
-        ;;TODO: Optionally color the notes
-        (make-music 'SequentialMusic 'elements (list drums))
+      ;; For EventChord, we need special cases that we do not yet have. In
+      ;; particular, there needs to be a common setMiddleC and unsetMiddleC
+      ;; before/after, which disallows mixing with 'real' notes. It is so far
+      ;; unclear (to me) how setNoteHead can be incorporated, yet I know that
+      ;; it is possible to have different noteHeads in one chord.
+      (ly:error "Invalid Type in transformDrumNotes: ~a is not supported" musicType)
+    )
+    (if (not (null? elementItem))
+      ; e.g. RelativeOctaveMusic, Repeats
+      (ly:music-set-property! drums 'element
+        (transformDrumNotes elementItem percHash)
       )
+    )
+    (if (not (null? elementList))
+      ; e.g. SequentialMusic
+      (ly:music-set-property! drums 'elements
+        (map (lambda (x) (transformDrumNotes x percHash)) elementList)
+      )
+    )
+    (if (and (null? elementList) (null? elementItem))
     (begin
-      (ly:warning "WARNING: Unknown Type in transformDrumNotes: ~a" musicType)
-      (ly:warning "Only know how to handle:")
-      (ly:warning " NoteEvent,")
-      ;;(ly:warning " MultiMeasureRestMusic,")
-      ;;(ly:warning " RelativeOctaveMusic,")
-      (ly:warning " RestEvent,")
-      (ly:warning " SequentialMusic,")
-      (ly:warning " UnfoldedRepeatedMusic.")
-      (display-scheme-music drums)
-      ;;TODO: Optionally color the notes
-      (make-music 'SequentialMusic 'elements (list drums))
-    ))))))
+      (ly:debug "DrumProp: ~a DrumType: ~a" drumProp drumType)
+      (if (and (not drumProp) (not (null? drumType)))
+        (ly:debug "drum ~a has no configured output, defaulting to slash" drumType)
+      )
+      (make-sequential-music (list
+        (setNoteHead
+          (if drumProp
+            (list-ref drumProp 0)
+            (if (null? drumType) 'default 'slash)
+        ))
+        (if (not (null? drumType))
+          (setMiddleC 0)
+          (make-music 'SequentialMusic (list))
+        )
+        (begin
+          (ly:music-set-property! drums 'pitch
+            (if (null? drumType)
+              (ly:music-property drums 'pitch)
+              (ly:make-pitch 0 (if drumProp (list-ref drumProp 2) 0))
+          ))
+          drums
+        )
+        (if (not (null? drumType))
+          (unsetMiddleC)
+          (make-music 'SequentialMusic (list))
+        )
+        (revertNoteHead)
+      ))
+    )
+    ; else: repeat (the changed) drums:
+    drums
+    )
   )
 )
 
 % puts crossed notes into the current Staff or the drum sequence into
 % the percGit Staff if we make a MIDI.
 perc = #(define-music-function
-  (parser location drums)
+  (drums)
   (ly:music?)
   (if makeMidi
+    ; TODO: make this into scheme, and maybe iterate through drums to switch
+    ; back context to main system on notes actually containing a pitch (or not
+    ; containing a drum-type)
     #{
       <<
         {}
         \context DrumStaff = "percGit" { #drums }
       >>
     #}
-    (make-music
-      'SequentialMusic
-      'elements (list
-        (setNoteHead 'harmonic)
-        (setMiddleC 0)
-        (transformDrumNotes drums (alist->hash-table percTable))
-        (unsetMiddleC)
-        (make-music ;; revert NoteHead
-          'ContextSpeccedMusic
-          'context-type
-          'Bottom
-          'element
-          (make-music
-            'RevertProperty
-            'grob-property-path
-            (list (quote style))
-            'symbol
-            'NoteHead))
-      )
-    )
+    (absolute (make-sequential-music (list
+      (transformDrumNotes drums (alist->hash-table percTable))
+    )))
+
   )
 )
 
