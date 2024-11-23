@@ -2,7 +2,7 @@
 
 %{
   Provides
-    \solo music
+    \solo N? music
 %}
 
 #(if (defined? 'SOLO_LY_ALREADY_INCLUDED)
@@ -15,7 +15,7 @@ $(if (not (defined? 'SPANS_LY_ALREADY_INCLUDED))
 )
 
 solo = #(define-music-function
-  (parser location musix)
-  (ly:music?)
-  #{ \namedSpan "Solo" #musix #}
+  (middleCPos musix)
+  ((number? 1) ly:music?)
+  (namedSpan "Solo" middleCPos musix)
 )

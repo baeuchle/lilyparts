@@ -5,30 +5,37 @@
 \include "lilyparts/head.ly"
 hasEins = ##t
 \include "lilyparts/calc.ly"
-#(set-global-staff-size 32)
+#(set-global-staff-size 24)
+\include "test-helper.ly"
 
 #(define percTable '(
         (hihat cross #f 4)
         (snare xcircle #f 2)
-        (hightom xcircle #f -2)
-        (lowtom xcircle #f -4)
+        (hightom triangle #f -2)
+        (lowtom diamond #f -4)
         ))
 
-global = {}
 gitEinsS = \relative c {
-  \namedSpan "Normal notes" { c4 c c c }
-  \namedSpan "Notes inside \perc" \perc { c8 c d d e-- e f-> f }
-  \namedSpan "drums inside \perc" \perc \drummode { hh4 sn r8 toml tomh4 }
-  \namedSpan "unfolded and unknown" \perc \drummode { \repeat unfold 6 hh8 cymr4 }
-  \bar "|."
+  \perc \drummode { \mark\default hh4-> sn^\markup{markup} tomh8 toml cymr r R1 }
+  \mark\default \perc { \drummode {sn8} c8 d e f d c \drummode {tomh8} }
+  \mark\default \perc \drummode { \repeat volta 3 { \repeat unfold 4 hh4 } \alternative { \repeat unfold 8 sn8 { \repeat tremolo 4 { toml16 tomh } \repeat tremolo 8 { toml32 tomh } }}}
+  \mark\default \repeat unfold 16 c4
+  \fine
 }
-gitDiviS = { s1*4 }
+
 \include "lilyparts/stimmen.ly"
 
 \book {
   \header {
-    title = "Test für Perkussive Gitarren"
+    title = "Test für perkussive Gitarren"
   }
   \include "lilyparts/paper.ly"
   \include "lilyparts/score.ly"
+  \markuplist {
+    \wordwrap-lines \bold { Percussion in normal voice systems }
+    \wordwrap-lines { \bold\box{A}: Test "\perc" for the 4 defined drums, an undefined drum, rest, multirest, RehearsalMark }
+    \wordwrap-lines { \bold\box{B}: Normal notes inside "\perc" between drums }
+    \wordwrap-lines { \bold\box{C}: Repeat volta inside "\perc" }
+    \wordwrap-lines { \bold\box{D}: Normal notes in the voice }
+  }
 }
