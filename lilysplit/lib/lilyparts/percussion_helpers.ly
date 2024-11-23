@@ -127,15 +127,19 @@ perc = #(define-music-function
   (drums)
   (ly:music?)
   (if makeMidi
-    ; TODO: make this into scheme, and maybe iterate through drums to switch
-    ; back context to main system on notes actually containing a pitch (or not
-    ; containing a drum-type)
-    #{
-      <<
-        {}
-        \context DrumStaff = "percGit" { #drums }
-      >>
-    #}
+    ; TODO: Maybe iterate through drums and switch to percGit 'only' when
+    ; actual drums are encountered. This would usually mean switching very
+    ; often, which seems excessive for what we expect to be a corner case
+    ; (normal notes inside \perc).
+    (make-simultaneous-music (list
+      (make-simultaneous-music '())
+      (make-music 'ContextSpeccedMusic
+        'property-operations '()
+        'context-id "percGit"
+        'context-type 'Staff
+        'element drums
+      )
+    ))
     (absolute (make-sequential-music (list
       (transformDrumNotes drums (alist->hash-table percTable))
     )))
