@@ -56,7 +56,6 @@ gitZweiS = \relative c' {
   \divisi #showEins #2 \repeat percent 2 \melodieZ \repeat percent 2 \splitZwei
   \fine
 }
-gitDiviS = { s1*19 }
 
 \include "lilyparts/stimmen.ly"
 
@@ -81,6 +80,5 @@ gitDiviS = { s1*19 }
     \wordwrap-lines { \bold\box{D}: repeat volta inside / around split }
     \wordwrap-lines { \bold\box{E}: repeat unfold inside / around split }
     \wordwrap-lines { \bold\box{F}: repeat percent }
-    \wordwrap-lines \with-color #red \bold { TODO: automatically calculate length of gitDiviS }
   }
 }
