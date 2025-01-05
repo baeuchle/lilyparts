@@ -7,6 +7,25 @@
 
 \include "chords.ly"
 
+#(define equivalent_length
+  (if hasEins
+    (ly:music-length gitEinsS)
+  (if hasZwei
+    (ly:music-length gitZweiS)
+  (if hasDrei
+    (ly:music-length gitDreiS)
+  (if hasVier
+    (ly:music-length gitVierS)
+  (if hasMast
+    (ly:music-length gitMastS)
+    ; if we have neither of the above: what the f? But we'll probably not need
+    ; gitDiviS then, either.
+    (ly:music-length (make-sequential-music '()))
+  )))))
+)
+
+#(define gitDiviS (make-music 'SkipEvent 'duration (make-duration-of-length equivalent_length)))
+
 masterR = {
   \global
   \clef "G"
